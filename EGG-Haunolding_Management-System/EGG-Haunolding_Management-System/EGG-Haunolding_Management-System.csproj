@@ -7,4 +7,8 @@
     <RootNamespace>EGG_Haunolding_Management_System</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EGG-Haunolding_Magement-System.Class\EGG-Haunolding_Management-System.Class.csproj" />
+  </ItemGroup>
+
 </Project>
