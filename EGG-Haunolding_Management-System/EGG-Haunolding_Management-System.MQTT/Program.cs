@@ -4,109 +4,89 @@ using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Client;
 using MQTTnet.Client.Internal;
 using MQTTnet.Protocol;
 
 
 
-// HEAVILY WIP!
+//HEAVILY WIP!
 
+await Connect_Client();
+await Handle_Received_Application_Message();
+static async Task Connect_Client()
+{
+    /*
+     * This sample creates a simple MQTT client and connects to a public broker.
+     *
+     * Always dispose the client when it is no longer used.
+     * The default version of MQTT is 3.1.1.
+     */
 
-DataItem dataItem = new DataItem();
-//await Connect_Client();
-//await Handle_Received_Application_Message();
+    var mqttFactory = new MqttFactory();
 
-// static async Task Connect_Client()
-//{
-//    var mqttFactory = new MqttFactory();
+    using (var mqttClient = mqttFactory.CreateMqttClient())
+    {
+        // Use builder classes where possible in this project.
+        var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("test.mosquitto.org").Build();
 
-//    using (var mqttClient = mqttFactory.CreateMqttClient())
-//    {
-//        var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("test.mosquitto.org").Build();
+        // This will throw an exception if the server is not available.
+        // The result from this message returns additional data which was sent 
+        // from the server. Please refer to the MQTT protocol specification for details.
+        var response = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
+        Console.WriteLine("The MQTT client is connected.");
 
-//        var response = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+       // response.DumpToConsole();
 
-//        Console.WriteLine("The MQTT client is connected.");
+        // Send a clean disconnect to the server by calling _DisconnectAsync_. Without this the TCP connection
+        // gets dropped and the server will handle this as a non clean disconnect (see MQTT spec for details).
+        var mqttClientDisconnectOptions = mqttFactory.CreateClientDisconnectOptionsBuilder().Build();
 
-//        var mqttClientDisconnectOptions = mqttFactory.CreateClientDisconnectOptionsBuilder().Build();
+        await mqttClient.DisconnectAsync(mqttClientDisconnectOptions, CancellationToken.None);
+    }
+}
+static async Task Handle_Received_Application_Message()
+{
+    /*
+     * This sample subscribes to a topic and processes the received message.
+     */
 
-//        await mqttClient.DisconnectAsync(mqttClientDisconnectOptions, CancellationToken.None);
-//    }
-//}
-//static async Task Handle_Received_Application_Message()
-//{
-//    /*
-//     * This sample subscribes to a topic and processes the received message.
-//     */
+    var mqttFactory = new MqttFactory();
 
-//    var mqttFactory = new MqttFactory();
+    using (var mqttClient = mqttFactory.CreateMqttClient())
+    {
+        var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("test.mosquitto.org").Build();
 
-//    using (var mqttClient = mqttFactory.CreateMqttClient())
-//    {
-//        var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("test.mosquitto.org").Build();
+        // Setup message handling before connecting so that queued messages
+        // are also handled properly. When there is no event handler attached all
+        // received messages get lost.
+        mqttClient.ApplicationMessageReceivedAsync += e =>
+        {
+            Console.WriteLine("Received application message.");
+            //e.DumpToConsole();
+            //e.
 
-//        // Setup message handling before connecting so that queued messages
-//        // are also handled properly. When there is no event handler attached all
-//        // received messages get lost.
-//        mqttClient.ApplicationMessageReceivedAsync += e =>
-//        {
-//            Console.WriteLine("Received application message.");
-//            //e.DumpToConsole();
+            return Task.CompletedTask;
+        };
 
-//            return Task.CompletedTask;
-//        };
+        await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
-//        await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+        var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+            .WithTopicFilter(
+                f =>
+                {
+                    f.WithTopic("zeahlerbroadcast/#");
+                })
+            .Build();
 
-//        var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-//            .WithTopicFilter(
-//                f =>
-//                {
-//                    f.WithTopic("zaehlerbroadcast");
-//                })
-//            .Build();
+        var result = mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+        foreach(var message in result.Result.Items)
+        {
+            Console.WriteLine(message.ResultCode);
+        }
+        Console.WriteLine("MQTT client subscribed to topic.");
 
-//        await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-
-//        Console.WriteLine("MQTT client subscribed to topic.");
-
-//        Console.WriteLine("Press enter to exit.");
-//        Console.ReadLine();
-//    }
-//static async Task Main(string[] args)
-//{
-//    var factory = new MqttFactory();
-//    var client = factory.CreateMqttClient();
-//    var options = new MqttClientOptionsBuilder().WithTcpServer("localhost", 1883).WithClientId("mqtt_consumer").Build();
-//    client.UseConnectedHandler(async e => {
-//        Console.WriteLine("Connected to MQTT broker.");
-//        var topicFilter = new MqttTopicFilterBuilder().WithTopic("test/topic").Build();
-//        await client.SubscribeAsync(new MqttClientSubscribeOptionsBuilder().WithTopicFilter(topicFilter).Build());
-//    });
-//    client.UseDisconnectedHandler(async e => {
-//        Console.WriteLine("Disconnected from MQTT broker.");
-//        await Task.Delay(TimeSpan.FromSeconds(5));
-//        try
-//        {
-//            await client.ConnectAsync(options, CancellationToken.None);
-//        }
-//        catch
-//        {
-//            Console.WriteLine("Reconnecting to MQTT broker failed.");
-//        }
-//    });
-//    client.UseApplicationMessageReceivedHandler(e => {
-//        Console.WriteLine($"Received message on topic '{e.ApplicationMessage.Topic}': {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
-//    });
-//    try
-//    {
-//        await client.ConnectAsync(options, CancellationToken.None);
-//    }
-//    catch
-//    {
-//        Console.WriteLine("Connecting to MQTT broker failed.");
-//    }
-//    Console.ReadLine();
-//}
+        Console.WriteLine("Press enter to exit.");
+        Console.ReadLine();
+    }
+}
