@@ -11,8 +11,6 @@
 
         public List<DataItem> GetAllDataByOrigin(string origin)
         {
-            List<DataItem> data = new List<DataItem>();
-
             return GetDataByOrigin(origin);
         }
 

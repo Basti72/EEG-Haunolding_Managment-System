@@ -8,6 +8,6 @@
 
         public int Saldo { get; set; }
 
-        public int SaldoAvrg { get; set; }
+        public int SaldoAvg { get; set; }
     }
 }
