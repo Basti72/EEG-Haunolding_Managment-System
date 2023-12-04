@@ -7,16 +7,29 @@ namespace EGG_Haunolding_Management_System.Controllers
 {
     public class DashboardController : Controller
     {
-        private readonly IDataStore _dataStore;
-
+        private readonly IDataStore m_DataStore;
         public DashboardController(IDataStore dataStore)
         {
-            _dataStore = dataStore;
+            m_DataStore = dataStore;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            return View();
+            var data = m_DataStore.GetAllDataByOrigin("Oberndorfer");
+
+            List<DataPoint> timeAndValues = new List<DataPoint>();
+            foreach(var x in data)
+                timeAndValues.Add(new DataPoint { X = Util.ToUnixTimestamp(x.Time), Y = x.Saldo });
+
+            var model = new DashboardViewModel
+            {
+                TimeAndValues = timeAndValues,
+                Title = "Saldo",
+                Origin = data[0].Origin
+            };
+            return View(model);
+            
         }
     }
+
 }
