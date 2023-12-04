@@ -27,15 +27,24 @@
                     }
                 ],
                 axisX: {
-                    valueFormatString: "DD-MM-YYYY", // Customize the date format as needed
+                    valueFormatString: "DD/MMM/YYYY HH:mm:ss", // Customize the date format as needed
                     title: "Datum"
                 },
                 axisY: {
                     title: "Saldo"
                 },
+                toolTip: {
+                    contentFormatter: function (e) {
+                        var content = "Datum: " + CanvasJS.formatDate(e.entries[0].dataPoint.x, "DD-MM-YYYY HH:mm:ss") + "<br/>";
+                        content += "Saldo: " + e.entries[0].dataPoint.y;
+                        return content;
+                    }
+                    //content: "{x}: {y}" // Customize the tooltip content
+                },
                 data: [
                     {
                         type: "line",
+                        xValueFormatString: "DD/MM/YYYY HH:mm:ss",
                         xValueType: "dateTime",
                         dataPoints: @Html.Raw(Json.Serialize(Model.TimeAndValues))
                     }

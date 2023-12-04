@@ -1,0 +1,2 @@
+Basti:
+ - Change from CanvasJS to use Chart.js (that's free to use)
