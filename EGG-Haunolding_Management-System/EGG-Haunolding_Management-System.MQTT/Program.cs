@@ -1,18 +1,23 @@
-﻿using EGG_Haunolding_Magement_System.Class;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Internal;
 using MQTTnet.Protocol;
+using System.Text;
+using System.Text.Json.Nodes;
+using System.Text.Json;
+using EGG_Haunolding_Management_System.Class;
+using EGG_Haunolding_Magement_System.Class;
 
 
 
 //HEAVILY WIP!
-
+JsonDataItem jsonDataItem = new JsonDataItem();
+DataItem dataItem = new DataItem();
 await Connect_Client();
-await Handle_Received_Application_Message();
+await Handle_Received_Application_Message(dataItem);
 static async Task Connect_Client()
 {
     /*
@@ -45,7 +50,8 @@ static async Task Connect_Client()
         await mqttClient.DisconnectAsync(mqttClientDisconnectOptions, CancellationToken.None);
     }
 }
-static async Task Handle_Received_Application_Message()
+
+ static async Task Handle_Received_Application_Message(DataItem dataItem)
 {
     /*
      * This sample subscribes to a topic and processes the received message.
@@ -63,9 +69,10 @@ static async Task Handle_Received_Application_Message()
         mqttClient.ApplicationMessageReceivedAsync += e =>
         {
             Console.WriteLine("Received application message.");
-            //e.DumpToConsole();
-            //e.
-
+            var yeet = JsonSerializer.Deserialize<JsonDataItem>(Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment.ToArray()));
+            Console.WriteLine(yeet.zeittext);
+            dataItem = yeet.ToDataItem();
+            Console.WriteLine(dataItem.Time);
             return Task.CompletedTask;
         };
 
@@ -75,15 +82,12 @@ static async Task Handle_Received_Application_Message()
             .WithTopicFilter(
                 f =>
                 {
-                    f.WithTopic("zeahlerbroadcast/#");
+                    f.WithTopic("zaehlerbroadcast/#");
                 })
             .Build();
 
-        var result = mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-        foreach(var message in result.Result.Items)
-        {
-            Console.WriteLine(message.ResultCode);
-        }
+        await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+
         Console.WriteLine("MQTT client subscribed to topic.");
 
         Console.WriteLine("Press enter to exit.");

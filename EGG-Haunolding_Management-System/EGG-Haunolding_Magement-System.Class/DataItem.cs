@@ -9,5 +9,7 @@
         public int Saldo { get; set; }
 
         public int SaldoAvrg { get; set; }
+
+        
     }
 }
