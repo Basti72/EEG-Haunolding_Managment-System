@@ -16,6 +16,7 @@ namespace EGG_Haunolding_Management_System.Controllers
 
         public IActionResult Index()
         {
+            var test = System.IO.Directory.GetCurrentDirectory() + "\\Resources\\ConnectionString.txt";
             return View();
         }
     }
