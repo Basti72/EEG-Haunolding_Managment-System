@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Client.;
+using MQTTnet.Client;
 using MQTTnet.Client.Internal;
 using MQTTnet.Protocol;
 
