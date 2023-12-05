@@ -21,6 +21,11 @@ namespace EGG_Haunolding_Magement_System.Class
             ConnectionString = File.ReadAllText(path);
         }
 
+        public List<DataItem> GetAllData()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<DataItem> GetAllDataByOrigin(string origin)
         {
             using MySqlConnection connection = new(ConnectionString);
@@ -37,6 +42,11 @@ namespace EGG_Haunolding_Magement_System.Class
             var entry = new { Origin = origin };
 
             return connection.QueryFirstOrDefault<DataItem>("SELECT * FROM Data WHERE Origin = @Origin ORDER BY TIME DESC", entry);
+        }
+
+        public string[] GetOrigins()
+        {
+            throw new NotImplementedException();
         }
     }
 }
