@@ -1,5 +1,5 @@
-Docker Befehl: docker run -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=EGG-Haunolding_Management-System -p 3306:3306 mysql
-Create Table Befehl:
+docker run -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=EGG-Haunolding_Management-System -p 3306:3306 mysql
+
 CREATE TABLE `Data` (
 	`Origin` VARCHAR(50),
 	`Time` DATETIME,
@@ -8,5 +8,19 @@ CREATE TABLE `Data` (
     primary key(Origin, Time)
 )
 
-Z:\SWP\EGGHaunoldingMSM\EEG-Haunolding_Managment-System\EGG-Haunolding_Management-System\Resources\ConnectionString.txt
-Z:\SWP\EGGHaunoldingMSM\EEG-Haunolding_Managment-System\EGG-Haunolding_Management-System\EGG-Haunolding_Management-System\Resources\ConnectionString.txt
+INSERT INTO Data VALUES
+("Bell", '2023-12-05 12:00:00', 10, 10),
+("Bell", '2023-12-05 12:00:30', 11, 10),
+("Bell", '2023-12-05 12:01:00', 8, 10),
+("Bell", '2023-12-05 12:01:30', 10, 10),
+("Bell", '2023-12-05 12:02:00', 15, 11),
+("Oberndorfer", '2023-12-05 12:00:00', -45, -43),
+("Oberndorfer", '2023-12-05 12:00:30', -41, -43),
+("Oberndorfer", '2023-12-05 12:01:00', -40, -43),
+("Oberndorfer", '2023-12-05 12:01:30', -44, -43),
+("Oberndorfer", '2023-12-05 12:02:00', -43, -43),
+("Roider", '2023-12-05 12:00:00', -1, 1),
+("Roider", '2023-12-05 12:00:30', -6, 0),
+("Roider", '2023-12-05 12:01:00', -10, -1),
+("Roider", '2023-12-05 12:01:30', -7, -1),
+("Roider", '2023-12-05 12:02:00', -11, -2)

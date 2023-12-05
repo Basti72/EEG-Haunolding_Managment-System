@@ -1,1 +1,1 @@
-Server=localhost;Database=absolventenverband;Uid=root;Pwd=1234;
+Server=localhost;Database=EGG-Haunolding_Management-System;Uid=root;Pwd=1234;

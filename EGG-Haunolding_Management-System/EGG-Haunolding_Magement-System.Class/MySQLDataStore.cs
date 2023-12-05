@@ -1,14 +1,4 @@
-﻿// Docker Befehl: docker run -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=EGG-Haunolding_Management-System -p 3306:3306 mysql
-// Create Table Befehl:
-// CREATE TABLE `Data` (
-//	`Origin` VARCHAR(50),
-//	`Time` DATETIME,
-//	`Saldo` INT NULL,
-//	`SaldoAvg` INT NULL,
-//    primary key(Origin, Time)
-//)
-
-using MySqlConnector;
+﻿using MySqlConnector;
 using Dapper;
 
 namespace EGG_Haunolding_Magement_System.Class
@@ -23,7 +13,9 @@ namespace EGG_Haunolding_Magement_System.Class
 
         public List<DataItem> GetAllData()
         {
-            throw new NotImplementedException();
+            using MySqlConnection connection = new(ConnectionString);
+
+            return connection.Query<DataItem>("SELECT * FROM Data").ToList();
         }
 
         public List<DataItem> GetAllDataByOrigin(string origin)
@@ -46,7 +38,9 @@ namespace EGG_Haunolding_Magement_System.Class
 
         public string[] GetOrigins()
         {
-            throw new NotImplementedException();
+            using MySqlConnection connection = new(ConnectionString);
+
+            return connection.Query<string>("SELECT DISTINCT Origin FROM Data").ToArray();
         }
     }
 }
