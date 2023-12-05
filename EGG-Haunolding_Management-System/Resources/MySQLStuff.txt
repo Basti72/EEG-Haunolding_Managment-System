@@ -7,3 +7,6 @@ CREATE TABLE `Data` (
 	`SaldoAvg` INT NULL,
     primary key(Origin, Time)
 )
+
+Z:\SWP\EGGHaunoldingMSM\EEG-Haunolding_Managment-System\EGG-Haunolding_Management-System\Resources\ConnectionString.txt
+Z:\SWP\EGGHaunoldingMSM\EEG-Haunolding_Managment-System\EGG-Haunolding_Management-System\EGG-Haunolding_Management-System\Resources\ConnectionString.txt
