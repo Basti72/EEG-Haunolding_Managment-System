@@ -14,15 +14,23 @@
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
-            data: {
+            data: 
+            {
                 labels: @Html.Raw(Json.Serialize(Model.Times)),
-                datasets: [{
-                    label: 'Saldo',
-                    data: @Html.Raw(Json.Serialize(Model.Values)),
-                    borderColor: 'rgba(0, 0, 150, 1)',
-                    borderWidth: 3,
-                    fill: false
-                }]
+                datasets: [
+                    @for(int i = 0; i < Model.Values.Count; i++)
+                    {
+                        <text>
+                        {
+                            label: 'Saldo @Model.Origins[i]',
+                            data: @Html.Raw(Json.Serialize(Model.Values[i])),
+                            borderColor: 'rgba(0, 0, 160, 1)',
+                            borderWidth: 3,
+                            fill: false
+                        },
+                        </text>
+                    }
+                ]
             },
             options: {
                 scales: {

@@ -1,2 +1,2 @@
 Basti:
- - Change from CanvasJS to use Chart.js (that's free to use)
+ - Datum ist nicht korrekt werden einfach die vom ersten genommen (Vielleicht die letzten Abfragen damit immer mehr gleiche Zeit ist?)

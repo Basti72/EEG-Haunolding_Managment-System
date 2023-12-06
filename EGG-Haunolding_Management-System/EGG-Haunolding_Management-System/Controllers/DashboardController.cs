@@ -15,38 +15,32 @@ namespace EGG_Haunolding_Management_System.Controllers
 
         public ActionResult Index()
         {
-            var data1 = m_DataStore.GetAllDataByOrigin("Oberndorfer");
-            var data2 = m_DataStore.GetAllDataByOrigin("Bell");
-            var data3 = m_DataStore.GetAllDataByOrigin("Roider");
-            List<string> times = new List<string>();
-            List<List<int>> values = new List<List<int>>();
-            List<int> valueTemp = new List<int>();
-            foreach (var item in data1)
+            // Get all data by origin
+            List<List<DataItem>> dataList = new List<List<DataItem>>();
+            var origins = m_DataStore.GetOrigins();
+            foreach(var origin in origins)
+                dataList.Add(m_DataStore.GetAllDataByOrigin(origin));
+            // Assign data from DB to local variables
+            var times = new List<string>();
+            var values = new List<List<int>>();
+            for(int i = 0; i < dataList.Count; i++)
             {
-                times.Add(item.Time.ToString("yyyy-MM-dd HH:mm:ss"));
-                valueTemp.Add(item.Saldo);
+                List<int> ints = new List<int>();
+                for(int j = 0; j < dataList[i].Count; j++)
+                {
+                    // Only assign time once
+                    if (i == 0)
+                        times.Add(dataList[i][j].Time.ToString("yyyy-MM-dd HH:mm:ss"));
+                    ints.Add(dataList[i][j].Saldo);
+                }
+                values.Add(ints);
             }
-            values.Add(valueTemp);
-            values.Clear();
-
-            foreach (var item in data2)
-            {
-                valueTemp.Add(item.Saldo);
-            }
-            values.Add(valueTemp);
-            values.Clear();
-
-            foreach (var item in data3)
-            {
-                valueTemp.Add(item.Saldo);
-            }
-            values.Add(valueTemp);
-            values.Clear();
 
             var model = new DashboardViewModel
             {
                 Times = times,
-                Values = new List<int>{43, 50, 47}
+                Values = values,
+                Origins = origins.ToList()
             };
 
             return View(model);
