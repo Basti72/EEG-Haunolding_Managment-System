@@ -2,56 +2,49 @@
 
 <!DOCTYPE html>
 
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Line Chart</title>
 </head>
 <body>
-    <div id="chartContainer"></div>
-
-    <script type="text/javascript">
-        window.onload = function () {
-            var chart = new CanvasJS.Chart("chartContainer", {
-                theme: "light2",
-                zoomEnabled: true,
-                animationEnabled: true,
-                title: {
-                    text: "@Model.Title"
-                },
-                subtitles: [
-                    {
-                        text: "@Model.Origin"
-                    }
-                ],
-                axisX: {
-                    valueFormatString: "DD/MMM/YYYY HH:mm:ss", // Customize the date format as needed
-                    title: "Datum"
-                },
-                axisY: {
-                    title: "Saldo"
-                },
-                toolTip: {
-                    contentFormatter: function (e) {
-                        var content = "Datum: " + CanvasJS.formatDate(e.entries[0].dataPoint.x, "DD-MM-YYYY HH:mm:ss") + "<br/>";
-                        content += "Saldo: " + e.entries[0].dataPoint.y;
-                        return content;
-                    }
-                    //content: "{x}: {y}" // Customize the tooltip content
-                },
-                data: [
-                    {
-                        type: "line",
-                        xValueFormatString: "DD/MM/YYYY HH:mm:ss",
-                        xValueType: "dateTime",
-                        dataPoints: @Html.Raw(Json.Serialize(Model.TimeAndValues))
-                    }
-                ]
-            });
-            chart.render();
-        };
+    <canvas id="myChart"></canvas>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Times)),
+                datasets: [{
+                    label: 'Saldo',
+                    data: @Html.Raw(Json.Serialize(Model.Values)),
+                    borderColor: 'rgba(0, 0, 150, 1)',
+                    borderWidth: 3,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: [{
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Datum'
+                        }
+                    }],
+                    y: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Saldo'
+                        }
+                    }]
+                }
+            }
+        });
     </script>
 </body>
 </html>
