@@ -21,6 +21,11 @@ builder.Services.AddTransient<IDataStore>(ctx =>
     });
 });
 
+//builder.Services.AddTransient<IDataStore>(ctx =>
+//{
+//    return new MySQLDataStore(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionString.txt");
+//});
+
 
 var app = builder.Build();
 
