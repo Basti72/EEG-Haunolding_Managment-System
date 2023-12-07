@@ -50,7 +50,7 @@ namespace EGG_Haunolding_Management_System.Class
             var entry = new
             {
                 Origin = item.Origin,
-                Time = item.Time.ToString(),
+                Time = item.Time.ToString("yyyy-MM-dd HH:mm:ss"),
                 Saldo = item.Saldo,
                 SaldoAvg = item.SaldoAvg
             };

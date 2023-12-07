@@ -11,7 +11,11 @@ namespace EGG_Haunolding_Management_System.Class
         public static DataItem ToDataItem(this JsonDataItem jsonDataItem)
         {
             DataItem dataItem = new DataItem();
-            dataItem.Time = DateTime.Parse(jsonDataItem.zeittext);
+            if (jsonDataItem.zeittext == null)
+                dataItem.Time = DateTime.Now;
+            else
+                dataItem.Time = DateTime.Parse(jsonDataItem.zeittext);
+
             dataItem.Saldo = jsonDataItem.saldo;
             dataItem.SaldoAvg = jsonDataItem.saldoavg;
             dataItem.Origin = "dummy";
