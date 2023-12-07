@@ -13,7 +13,7 @@ namespace EGG_Haunolding_Management_System.Class
             DataItem dataItem = new DataItem();
             dataItem.Time = DateTime.Parse(jsonDataItem.zeittext);
             dataItem.Saldo = jsonDataItem.saldo;
-            dataItem.SaldoAvrg = jsonDataItem.saldoavg;
+            dataItem.SaldoAvg = jsonDataItem.saldoavg;
             dataItem.Origin = "dummy";
             return dataItem;
         }

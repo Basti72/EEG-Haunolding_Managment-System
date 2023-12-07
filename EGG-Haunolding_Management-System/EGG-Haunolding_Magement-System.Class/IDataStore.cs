@@ -1,4 +1,4 @@
-﻿namespace EGG_Haunolding_Magement_System.Class
+﻿namespace EGG_Haunolding_Management_System.Class
 {
     public interface IDataStore
     {

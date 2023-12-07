@@ -17,5 +17,10 @@
             Saldo = saldo;
             SaldoAvg = saldoAvg;
         }
+
+        public DataItem()
+        {
+            
+        }
     }
 }

@@ -1,4 +1,4 @@
-using EGG_Haunolding_Magement_System.Class;
+using EGG_Haunolding_Management_System.Class;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);

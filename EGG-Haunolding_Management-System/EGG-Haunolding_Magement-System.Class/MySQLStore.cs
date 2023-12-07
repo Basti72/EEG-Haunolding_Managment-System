@@ -1,7 +1,7 @@
 ﻿using MySqlConnector;
 using Dapper;
 
-namespace EGG_Haunolding_Magement_System.Class
+namespace EGG_Haunolding_Management_System.Class
 {
     public class MySQLStore : IDataStore, IMQTTCom
     {
