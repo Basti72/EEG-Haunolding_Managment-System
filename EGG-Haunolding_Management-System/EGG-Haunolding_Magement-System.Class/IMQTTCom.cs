@@ -2,6 +2,6 @@
 {
     public interface IMQTTCom
     {
-
+        public void InsertIntoDatabase(DataItem item);
     }
 }

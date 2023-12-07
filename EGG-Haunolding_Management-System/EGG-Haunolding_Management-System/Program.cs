@@ -23,8 +23,13 @@ builder.Services.AddTransient<IDataStore>(ctx =>
 
 //builder.Services.AddTransient<IDataStore>(ctx =>
 //{
-//    return new MySQLDataStore(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionString.txt");
+//    return new MySQLStore(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionString.txt");
 //});
+
+builder.Services.AddTransient<IMQTTCom>(ctx =>
+{
+    return new MySQLStore(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionString.txt");
+});
 
 
 var app = builder.Build();

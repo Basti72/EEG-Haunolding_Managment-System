@@ -3,10 +3,10 @@ using Dapper;
 
 namespace EGG_Haunolding_Magement_System.Class
 {
-    public class MySQLDataStore : IDataStore
+    public class MySQLStore : IDataStore, IMQTTCom
     {
         private readonly string ConnectionString;
-        public MySQLDataStore(string path)
+        public MySQLStore(string path)
         {
             ConnectionString = File.ReadAllText(path);
         }
@@ -41,6 +41,21 @@ namespace EGG_Haunolding_Magement_System.Class
             using MySqlConnection connection = new(ConnectionString);
 
             return connection.Query<string>("SELECT DISTINCT Origin FROM Data").ToArray();
+        }
+
+        public void InsertIntoDatabase(DataItem item)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Origin = item.Origin,
+                Time = item.Time.ToString(),
+                Saldo = item.Saldo,
+                SaldoAvg = item.SaldoAvg
+            };
+
+            connection.Execute("INSERT INTO Data VALUES (@Origin, @Time, @Saldo, @SaldoAvg)", entry);
         }
     }
 }
