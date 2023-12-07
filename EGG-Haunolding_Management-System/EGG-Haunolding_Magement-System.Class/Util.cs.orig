@@ -4,10 +4,11 @@ namespace EGG_Haunolding_Management_System.Class
 {
     public static class Util
     {
+<<<<<<< HEAD
         public static long ToUnixTimestamp(this DateTime dateTime)
         {
             return (long)(dateTime.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-        }
+=======
         public static DataItem ToDataItem(this JsonDataItem jsonDataItem)
         {
             DataItem dataItem = new DataItem();
@@ -16,6 +17,7 @@ namespace EGG_Haunolding_Management_System.Class
             dataItem.SaldoAvrg = jsonDataItem.saldoavg;
             dataItem.Origin = "dummy";
             return dataItem;
+>>>>>>> MQTT
         }
     }
 }

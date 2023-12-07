@@ -8,6 +8,7 @@
 
         public int Saldo { get; set; }
 
+<<<<<<< HEAD
         public int SaldoAvg { get; set; }
 
         public DataItem(string origin, DateTime time, int saldo, int saldoAvg)
@@ -17,5 +18,10 @@
             Saldo = saldo;
             SaldoAvg = saldoAvg;
         }
+=======
+        public int SaldoAvrg { get; set; }
+
+        
+>>>>>>> MQTT
     }
 }
