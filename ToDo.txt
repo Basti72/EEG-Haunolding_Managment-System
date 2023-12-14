@@ -1,2 +1,3 @@
 Basti:
- - Datum ist nicht korrekt werden einfach die vom ersten genommen (Vielleicht die letzten Abfragen damit immer mehr gleiche Zeit ist?)
+ - Datum könnte nicht korrekt sein, da einfach dass vom ersten genommen wird auch wenn die anderen, andere Datums haben würden
+ - mehr Farben noch ins array adden
