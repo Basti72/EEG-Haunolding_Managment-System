@@ -1,0 +1,1 @@
+Server=htlvb-project;Database=2324_5ahwii_roider;Uid=2324_5ahwii_roider;Pwd=obistinkt;

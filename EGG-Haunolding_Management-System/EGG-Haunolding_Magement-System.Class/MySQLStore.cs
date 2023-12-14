@@ -55,7 +55,7 @@ namespace EGG_Haunolding_Management_System.Class
                 SaldoAvg = item.SaldoAvg
             };
 
-            connection.Execute("INSERT INTO Data VALUES (@Origin, @Time, @Saldo, @SaldoAvg)", entry);
+            connection.Execute("INSERT INTO Data(Origin, Time, Saldo, SaldoAvg) VALUES (@Origin, @Time, @Saldo, @SaldoAvg)", entry);
         }
     }
 }

@@ -1,0 +1,1 @@
+Server=78.104.47.39;Database=2324_5ahwii_roider;Uid=2324_5ahwii_roider;Pwd=obistinkt;

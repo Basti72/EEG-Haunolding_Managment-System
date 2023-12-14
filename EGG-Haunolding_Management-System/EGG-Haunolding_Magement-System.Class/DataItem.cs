@@ -10,12 +10,15 @@
 
         public int SaldoAvg { get; set; }
 
-        public DataItem(string origin, DateTime time, int saldo, int saldoAvg)
+        public int CompressionLevel { get; set; }
+
+        public DataItem(string origin, DateTime time, int saldo, int saldoAvg, int compressionLevel)
         {
             Origin = origin;
             Time = time;
             Saldo = saldo;
             SaldoAvg = saldoAvg;
+            CompressionLevel = compressionLevel;
         }
 
         public DataItem()
