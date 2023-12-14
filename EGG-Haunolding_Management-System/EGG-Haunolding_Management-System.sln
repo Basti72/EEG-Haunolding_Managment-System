@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EGG-Haunolding_Management-System", "EGG-Haunolding_Management-System\EGG-Haunolding_Management-System.csproj", "{0AB83436-7643-4EAE-8C95-AEDB331E9968}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EGG-Haunolding_Management-System", "EGG-Haunolding_Management-System\EGG-Haunolding_Management-System.csproj", "{0AB83436-7643-4EAE-8C95-AEDB331E9968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EGG-Haunolding_Management-System.Class", "EGG-Haunolding_Magement-System.Class\EGG-Haunolding_Management-System.Class.csproj", "{381A7B16-6221-4CEB-B60A-1C2A860014A4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EGG-Haunolding_Management-System.MQTT", "EGG-Haunolding_Management-System.MQTT\EGG-Haunolding_Management-System.MQTT.csproj", "{3E4AA038-4676-4CC1-B7A9-4E58D25B6657}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EGG-Haunolding_Management-System.Class", "EGG-Haunolding_Magement-System.Class\EGG-Haunolding_Management-System.Class.csproj", "{381A7B16-6221-4CEB-B60A-1C2A860014A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{381A7B16-6221-4CEB-B60A-1C2A860014A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{381A7B16-6221-4CEB-B60A-1C2A860014A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{381A7B16-6221-4CEB-B60A-1C2A860014A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E4AA038-4676-4CC1-B7A9-4E58D25B6657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E4AA038-4676-4CC1-B7A9-4E58D25B6657}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E4AA038-4676-4CC1-B7A9-4E58D25B6657}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E4AA038-4676-4CC1-B7A9-4E58D25B6657}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,164 @@
+[33mcommit 214ba3ac59e4b7db176c25da2314b78d245877d1[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/MQTT[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/Authentification[m[33m, [m[1;32mAuthentification[m[33m)[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Thu Dec 7 09:39:00 2023 +0100
+
+    Added Backround Service for MQTT
+
+[33mcommit d6be1c1978c68e58205266352afc9b526d17c5b5[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Thu Dec 7 08:38:02 2023 +0100
+
+    Fixed MQTT Merge
+
+[33mcommit 01f759dd1c89f73e2cf3abd6a177e54e6c38abde[m
+Merge: 52b009f ec2b472
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Thu Dec 7 08:31:54 2023 +0100
+
+    Merged MQTT Branch
+
+[33mcommit 52b009f157f48b863af5257d8496bb63ff5d0152[m[33m ([m[1;31morigin/Database[m[33m)[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Thu Dec 7 08:25:28 2023 +0100
+
+    Implemented IMQTTCom
+
+[33mcommit 11bd9f8cecae4b5b271746f5f0de17c7ac20905f[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Tue Dec 5 14:33:07 2023 +0100
+
+    Implemented IDataStore changes
+
+[33mcommit 085af6d773676524a705f16155dcd7e4eb2528a2[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Tue Dec 5 13:54:58 2023 +0100
+
+    Fixed Database Merge
+
+[33mcommit bccbec207f801ece8a37ca03061c53f18de04891[m
+Merge: f593ba3 b1891bb
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Tue Dec 5 13:51:08 2023 +0100
+
+    Merged Database branch
+
+[33mcommit f593ba33f56757f894f423616b4f7a9ec3d1d079[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Tue Dec 5 13:45:34 2023 +0100
+
+    Added new functions to IDataStore
+
+[33mcommit b1891bb65fc37f18f31dca0c8a949df78b62b8ac[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Tue Dec 5 13:24:36 2023 +0100
+
+    Added MySQLStuff.txt
+
+[33mcommit ec2b472baf0ce58e6e4dd4980628dbebee8bcee8[m
+Author: Karim Roider <karim.roider@gmail.com>
+Date:   Tue Dec 5 09:39:26 2023 +0100
+
+    Fix typos, add GetDataItem()
+
+[33mcommit 001fd9847f87c4e30dbd7765fcb8957a7286ed1f[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Mon Dec 4 15:44:03 2023 +0100
+
+    Implemented MySQLDataStore
+
+[33mcommit 231a41f005471177ca2d82dd39c35ff1c7aff1e2[m
+Author: Karim Roider <karim.roider@gmail.com>
+Date:   Mon Dec 4 15:42:55 2023 +0100
+
+    Is able to receive MQTT data aswell as deserialize it into working DataItem
+
+[33mcommit 0b1cd50e415b4f179736eb45e456df1ed13493c6[m[33m ([m[1;32mWebapp[m[33m)[m
+Author: Oberndorfer Sebastian <oberndorfer.sebastian@gmail.com>
+Date:   Mon Dec 4 15:07:18 2023 +0100
+
+    Created basic saldo chart with data from database
+
+[33mcommit be6cbf13a3cffaf751b001b247ac9b4f79c38279[m
+Author: Karim Roider <karim.roider@gmail.com>
+Date:   Mon Dec 4 14:08:16 2023 +0100
+
+    Mqtt shenenigans
+
+[33mcommit 62f7d1f0ebd6fda7810e448b5ed0f53e2eef6600[m
+Merge: 3753f9c f245ce6
+Author: Oberndorfer Sebastian <oberndorfer.sebastian@gmail.com>
+Date:   Mon Dec 4 14:05:25 2023 +0100
+
+    Merge remote-tracking branch 'origin/main' into Webapp
+
+[33mcommit f245ce6d448877c95a70dc15c4a6c15da1454e67[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Mon Dec 4 14:00:59 2023 +0100
+
+    Implemented StaticDataStore
+
+[33mcommit 3753f9cf6cf9f85dfed07901730f7cba81f13b4d[m
+Author: Oberndorfer Sebastian <oberndorfer.sebastian@gmail.com>
+Date:   Mon Dec 4 13:51:47 2023 +0100
+
+    changed website
+
+[33mcommit ca0881d11f299a6185d4c978e5acce64de3c9ff7[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Mon Dec 4 13:34:31 2023 +0100
+
+    Changed DataItem
+
+[33mcommit a498fb99d9c99ba7a3ce9c54ff647d74e6b400ca[m
+Author: Karim Roider <karim.roider@gmail.com>
+Date:   Mon Dec 4 13:28:09 2023 +0100
+
+    idk bruv
+
+[33mcommit e0eb267cdedc78418a98c7c41865ec33c655588b[m
+Author: Karim Roider <karim.roider@gmail.com>
+Date:   Fri Dec 1 09:17:24 2023 +0100
+
+    Work on MQTT
+
+[33mcommit 5395ae14f0dd2e78a5d19146db37a5b7c4d6aaa2[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Fri Dec 1 09:13:57 2023 +0100
+
+    Project Setup 2
+
+[33mcommit 0129c61ad2483f538d12cb889846b9705646323d[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Thu Nov 30 10:18:30 2023 +0100
+
+    Added DataItem
+
+[33mcommit d4b64377b028a7d450683d35df126f3432ee1d40[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Thu Nov 30 09:16:25 2023 +0100
+
+    Projekt Setup 1
+
+[33mcommit c8773ca1d8671cfb8dcceb2864b227fdf57dd8a4[m
+Author: Karim Roider <karim.roider@gmail.com>
+Date:   Thu Nov 30 09:14:26 2023 +0100
+
+    Test2
+
+[33mcommit 9f03cc1742ca7a187b70a682c84bc7936d34b9a3[m
+Author: Karim Roider <karim.roider@gmail.com>
+Date:   Thu Nov 30 08:40:36 2023 +0100
+
+    Test
+
+[33mcommit b7441cbd718f6f27d3763f650717fe5e10d1fe42[m
+Author: Bell Florian <Florian.BELL@htlvb.at>
+Date:   Thu Nov 30 08:37:47 2023 +0100
+
+    Create Visual Studio Project
+
+[33mcommit bc853b6312a54ba9cd7d577b8cbfc41b3ef0f9e3[m
+Author: Basti72 <67582808+Basti72@users.noreply.github.com>
+Date:   Fri Nov 24 08:23:09 2023 +0100
+
+    Initial commit
