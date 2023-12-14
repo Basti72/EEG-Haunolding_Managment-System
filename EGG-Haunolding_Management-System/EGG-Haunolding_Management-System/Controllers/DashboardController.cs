@@ -15,20 +15,35 @@ namespace EGG_Haunolding_Management_System.Controllers
 
         public ActionResult Index()
         {
-            var data = m_DataStore.GetAllDataByOrigin("Oberndorfer");
-
-            List<DataPoint> timeAndValues = new List<DataPoint>();
-            foreach(var x in data)
-                timeAndValues.Add(new DataPoint { X = Util.ToUnixTimestamp(x.Time), Y = x.Saldo });
+            // Get all data by origin
+            List<List<DataItem>> dataList = new List<List<DataItem>>();
+            var origins = m_DataStore.GetOrigins();
+            foreach(var origin in origins)
+                dataList.Add(m_DataStore.GetAllDataByOrigin(origin));
+            // Assign data from DB to local variables
+            var times = new List<string>();
+            var values = new List<List<int>>();
+            for(int i = 0; i < dataList.Count; i++)
+            {
+                List<int> ints = new List<int>();
+                for(int j = 0; j < dataList[i].Count; j++)
+                {
+                    // Only assign time once
+                    if (i == 0)
+                        times.Add(dataList[i][j].Time.ToString("yyyy-MM-dd HH:mm:ss"));
+                    ints.Add(dataList[i][j].Saldo);
+                }
+                values.Add(ints);
+            }
 
             var model = new DashboardViewModel
             {
-                TimeAndValues = timeAndValues,
-                Title = "Saldo",
-                Origin = data[0].Origin
+                Times = times,
+                Values = values,
+                Origins = origins.ToList()
             };
+
             return View(model);
-            
         }
     }
 

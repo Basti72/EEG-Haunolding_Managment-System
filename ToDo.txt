@@ -1,0 +1,3 @@
+Basti:
+ - Datum könnte nicht korrekt sein, da einfach dass vom ersten genommen wird auch wenn die anderen, andere Datums haben würden
+ - mehr Farben noch ins array adden

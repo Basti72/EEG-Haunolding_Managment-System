@@ -2,47 +2,78 @@
 
 <!DOCTYPE html>
 
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Line Chart</title>
 </head>
 <body>
-    <div id="chartContainer"></div>
+    <style>
+    /* Adjust the height of the chart container */
+        #chartContainer {
+            height: calc(100vh - 80px); /* Adjust the percentage or pixel value as needed */
+            margin-top: 20px; /* Adjust to leave space for the navbar */
+        }
+    </style>
 
-    <script type="text/javascript">
-        window.onload = function () {
-            var chart = new CanvasJS.Chart("chartContainer", {
-                theme: "light2",
-                zoomEnabled: true,
-                animationEnabled: true,
-                title: {
-                    text: "@Model.Title"
-                },
-                subtitles: [
+    <div id="chartContainer">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        var lineColors = [
+            '#0000CC',
+            '#00CC00',
+            '#CC0000',
+            '#CCCC00',
+            '#CC00CC',
+            '#00CCCC',
+        ];
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: 
+            {
+                labels: @Html.Raw(Json.Serialize(Model.Times)),
+                datasets: [
+                    @for (int i = 0; i < Model.Values.Count; i++)
                     {
-                        text: "@Model.Origin"
-                    }
-                ],
-                axisX: {
-                    valueFormatString: "DD-MM-YYYY", // Customize the date format as needed
-                    title: "Datum"
-                },
-                axisY: {
-                    title: "Saldo"
-                },
-                data: [
-                    {
-                        type: "line",
-                        xValueType: "dateTime",
-                        dataPoints: @Html.Raw(Json.Serialize(Model.TimeAndValues))
+                        <text>
+                        {
+                            label: 'Saldo @Model.Origins[i]',
+                            data: @Html.Raw(Json.Serialize(Model.Values[i])),
+                            borderColor: lineColors[@i],
+                            //borderColor: 'rgba(160, 0, 160, 1)',
+                            borderWidth: 3,
+                            fill: false
+                        },
+                        </text>
                     }
                 ]
-            });
-            chart.render();
-        };
+            },
+            options: {
+                scales: {
+                    x: [{
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Datum'
+                        }
+                    }],
+                    y: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Saldo'
+                        }
+                    }]
+                }
+            }
+        });
     </script>
 </body>
 </html>
