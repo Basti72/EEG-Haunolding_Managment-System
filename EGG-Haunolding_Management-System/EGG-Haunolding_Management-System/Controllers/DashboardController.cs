@@ -1,0 +1,35 @@
+﻿using EGG_Haunolding_Management_System.Class;
+using EGG_Haunolding_Management_System.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+
+namespace EGG_Haunolding_Management_System.Controllers
+{
+    public class DashboardController : Controller
+    {
+        private readonly IDataStore m_DataStore;
+        public DashboardController(IDataStore dataStore)
+        {
+            m_DataStore = dataStore;
+        }
+
+        public ActionResult Index()
+        {
+            var data = m_DataStore.GetAllDataByOrigin("Oberndorfer");
+
+            List<DataPoint> timeAndValues = new List<DataPoint>();
+            foreach(var x in data)
+                timeAndValues.Add(new DataPoint { X = Util.ToUnixTimestamp(x.Time), Y = x.Saldo });
+
+            var model = new DashboardViewModel
+            {
+                TimeAndValues = timeAndValues,
+                Title = "Saldo",
+                Origin = data[0].Origin
+            };
+            return View(model);
+            
+        }
+    }
+
+}

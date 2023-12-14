@@ -1,0 +1,49 @@
+﻿@model DashboardViewModel
+
+<!DOCTYPE html>
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <title>Line Chart</title>
+</head>
+<body>
+    <div id="chartContainer"></div>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                theme: "light2",
+                zoomEnabled: true,
+                animationEnabled: true,
+                title: {
+                    text: "@Model.Title"
+                },
+                subtitles: [
+                    {
+                        text: "@Model.Origin"
+                    }
+                ],
+                axisX: {
+                    valueFormatString: "DD-MM-YYYY", // Customize the date format as needed
+                    title: "Datum"
+                },
+                axisY: {
+                    title: "Saldo"
+                },
+                data: [
+                    {
+                        type: "line",
+                        xValueType: "dateTime",
+                        dataPoints: @Html.Raw(Json.Serialize(Model.TimeAndValues))
+                    }
+                ]
+            });
+            chart.render();
+        };
+    </script>
+</body>
+</html>
+
