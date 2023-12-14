@@ -23,14 +23,16 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHostedService<MQTTBackroundService>();
 
+string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringExtern.txt";
+
 builder.Services.AddTransient<IDataStore>(ctx =>
 {
-    return new MySQLStore(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionString.txt");
+    return new MySQLStore(path);
 });
 
 builder.Services.AddTransient<IMQTTCom>(ctx =>
 {
-    return new MySQLStore(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionString.txt");
+    return new MySQLStore(path);
 });
 
 
