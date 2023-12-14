@@ -5,6 +5,7 @@ CREATE TABLE `Data` (
 	`Time` DATETIME,
 	`Saldo` INT NULL,
 	`SaldoAvg` INT NULL,
+	`CompressionLevel` INT DEFAULT 0,
     primary key(Origin, Time)
 )
 
