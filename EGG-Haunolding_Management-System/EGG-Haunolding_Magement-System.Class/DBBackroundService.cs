@@ -20,7 +20,7 @@ namespace EGG_Haunolding_Management_System.Class
                 int compressionDays = _configuration.GetValue<int>("CompressionLevel1");
                 DateTime compressionDay = DateTime.Now.AddDays(compressionDays * -1);
 
-                compressionDay = new DateTime(2023, 12, 1);
+                compressionDay = new DateTime(2023, 12, 6);
 
                 foreach (string origin in origins)
                 {

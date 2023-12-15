@@ -86,5 +86,15 @@ namespace EGG_Haunolding_Management_System.Class
         {
             _data.Add(item);
         }
+
+        public List<DataItem> GetAllLastDataByOrigin(string origin, int amount)
+        {
+            List<DataItem> data = GetDataByOrigin(origin);
+
+            return data.Where(x => x.Origin == origin)
+                .OrderByDescending(x => x.Time)
+                .Take(amount)
+                .ToList();
+        }
     }
 }
