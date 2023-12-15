@@ -1,4 +1,5 @@
 ﻿using EGG_Haunolding_Management_System.Class;
+using System.Globalization;
 
 namespace EGG_Haunolding_Management_System.Class
 {
@@ -14,7 +15,7 @@ namespace EGG_Haunolding_Management_System.Class
             if (jsonDataItem.zeittext == null)
                 dataItem.Time = DateTime.Now;
             else
-                dataItem.Time = DateTime.Parse(jsonDataItem.zeittext);
+                dataItem.Time = DateTime.Parse(jsonDataItem.zeittext, null, DateTimeStyles.AssumeUniversal);
 
             dataItem.Saldo = jsonDataItem.saldo;
             dataItem.SaldoAvg = jsonDataItem.saldoavg;

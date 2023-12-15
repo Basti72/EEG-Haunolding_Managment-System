@@ -23,7 +23,6 @@ namespace EGG_Haunolding_Management_System.Class
             return data.Where(x => x.Origin == origin)
                 .OrderByDescending(x => x.Time)
                 .FirstOrDefault();
-
         }
 
         private List<DataItem> GetDataByOrigin(string origin)
@@ -60,6 +59,32 @@ namespace EGG_Haunolding_Management_System.Class
             }
 
             return origins.ToArray();
+        }
+
+        public List<DataItem> GetCurrentDataByOriginByDay(string origin, DateTime time, int compressionLevel)
+        {
+            List<DataItem> data = new List<DataItem>();
+            for (int i = 0; i < _data.Count; i++)
+            {
+                if (_data[i].Origin == origin && _data[i].Time.Date == time.Date && _data[i].CompressionLevel == compressionLevel)
+                    data.Add(_data[i]);
+            }
+
+            return data;
+        }
+
+        public void DeleteAllDataByOriginByDay(string origin, DateTime time, int compressionLevel)
+        {
+            for (int i = 0; i < _data.Count; i++)
+            {
+                if (_data[i].Origin == origin && _data[i].Time.Date == time.Date && _data[i].CompressionLevel == compressionLevel)
+                    _data.Remove(_data[i]);
+            }
+        }
+
+        public void InsertData(DataItem item)
+        {
+            _data.Add(item);
         }
     }
 }

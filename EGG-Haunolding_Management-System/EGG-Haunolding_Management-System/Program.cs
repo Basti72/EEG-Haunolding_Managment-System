@@ -24,7 +24,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHostedService<MQTTBackroundService>();
 builder.Services.AddHostedService<DBBackroundService>();
 
-string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringExtern.txt";
+string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringIntern.txt";
 
 builder.Services.AddTransient<IDataStore>(ctx =>
 {
