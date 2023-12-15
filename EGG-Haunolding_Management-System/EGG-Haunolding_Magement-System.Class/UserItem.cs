@@ -9,7 +9,7 @@ namespace EGG_Haunolding_Management_System.Class
 {
     public class UserItem
     {
-        public UserItem(string UserName, string Password)
+        public UserItem(string Username, string Password)
         {
 
         }
@@ -20,7 +20,7 @@ namespace EGG_Haunolding_Management_System.Class
         public UserItem() { }
         public string Hash { get; set; }
         public string Salt { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
     }

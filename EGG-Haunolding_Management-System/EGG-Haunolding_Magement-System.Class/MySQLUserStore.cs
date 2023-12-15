@@ -8,19 +8,27 @@ using System.Threading.Tasks;
 
 namespace EGG_Haunolding_Management_System.Class
 {
-    public class MySqUserStore : IUserStore
+    public class MySQLUserStore : IUserStore
     {
+    private readonly string ConnectionString;
         MySqlConnection conn;
-        public MySqUserStore (string path)
+        public MySQLUserStore (string path)
         {
-            conn = new MySqlConnection (path);
+            ConnectionString = File.ReadAllText(path);
         }
 
         public void AddUser(string username, string password)
         {
-            string hash;
-            hash = Password.CreateHash(password, out string salt);
-            conn.ExecuteScalar($"Insert into users ({username},{hash},{salt},Admin");
+            using MySqlConnection conn = new MySqlConnection(ConnectionString);
+            string hash = Password.CreateHash(password, out string salt);
+            var entry = new
+            {
+                Username = username,
+                Hash = hash,
+                Salt = salt,
+                Role = "Admin"
+            };
+            conn.Execute("INSERT INTO users(username, hash, salt, role) VALUES (@Username, @Hash, @Salt, @Role)", entry);
         }
 
         public void ChangePassword(string username, string oldpw, string newpw, string confnewpw)
@@ -28,23 +36,18 @@ namespace EGG_Haunolding_Management_System.Class
             throw new NotImplementedException();
         }
 
-        public UserItem GetUser(string username, string password)
+        public UserItem? GetUser(string username, string password)
         {
             var entry = new
             {
-                Username = username
+                Username = username,
+                Password = password
             };
-
-            UserItem item = conn.QueryFirstOrDefault<UserItem>("SELECT * FROM users WHERE Username = @Username", entry);
-
-            if (!Password.DoesPasswordMatch(password, item.Hash, item.Salt))
-                item = null;
-
-
-            return item;
+            return conn.QueryFirstOrDefault<UserItem>("SELECT * FROM User WHERE Username = @Username AND Password = @Password", entry);
         }
+    
 
-        public IEnumerable<UserItem> GetUsers()
+    public IEnumerable<UserItem> GetUsers()
         {
             IEnumerable<UserItem> items = null;
 
