@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EGG_Haunolding_Management_System.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,21 @@ using System.Threading.Tasks;
 
 namespace EGG_Haunolding_Management_System.Class
 {
-    class UserItem
+    public class UserItem
     {
-        string Hash { get; set; }
-        string Salt { get; set; }
-        string UserName { get; set; }
-        string Role { get; set; }
+        public UserItem(string UserName, string Password)
+        {
+
+        }
+        public UserItem(string hash, string salt, string userName, string role, string password)
+        {
+            
+        }
+        public UserItem() { }
+        public string Hash { get; set; }
+        public string Salt { get; set; }
+        public string UserName { get; set; }
+        public string Role { get; set; }
+        public string Password { get; set; }
     }
 }
