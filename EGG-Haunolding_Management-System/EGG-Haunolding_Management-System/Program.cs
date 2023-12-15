@@ -24,17 +24,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHostedService<MQTTBackroundService>();
 builder.Services.AddHostedService<DBBackroundService>();
 
-string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringIntern.txt";
-
-builder.Services.AddTransient<IDataStore>(ctx =>
-{
-    return new MySQLStore(path);
-});
-
-builder.Services.AddTransient<IMQTTCom>(ctx =>
-{
-    return new MySQLStore(path);
-});
+string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringExtern.txt";
+builder.Services.AddTransient<IDataStore>(ctx => { return new MySQLStore(path); });
+builder.Services.AddTransient<IMQTTCom>(ctx => { return new MySQLStore(path); });
 
 
 var app = builder.Build();
@@ -46,6 +38,14 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

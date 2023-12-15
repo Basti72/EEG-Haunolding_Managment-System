@@ -25,7 +25,7 @@ namespace EGG_Haunolding_Management_System.Class
                     List<DataItem> data = _dataStore.GetCurrentDataByOriginByDay(origin, compressionDay, 0);
 
                     if(data.Count == 0)
-                        break;
+                        continue;
 
                     int saldoAvg = (int)data.Average(x => x.Saldo);
 
