@@ -4,6 +4,10 @@
     {
         List<DataItem> GetAllData();
         List<DataItem> GetAllDataByOrigin(string origin);
+        List<DataItem> GetCurrentDataByOriginByDay(string origin, DateTime time, int compressionLevel);
+        List<DataItem> GetAllLastDataByOrigin(string origin, int amount);
+        void DeleteAllDataByOriginByDay(string origin, DateTime time, int compressionLevel);
+        void InsertData(DataItem item);
         DataItem? GetCurrentDataByOrigin(string origin);
         string[] GetOrigins();
     }
