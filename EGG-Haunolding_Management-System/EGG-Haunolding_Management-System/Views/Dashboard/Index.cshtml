@@ -6,6 +6,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>Line Chart</title>
 </head>
 <body>
@@ -20,17 +21,43 @@
     <div id="chartContainer">
         <canvas id="myChart"></canvas>
     </div>
+    <div class="form-group">
+        <select id="originDropdown" asp-for="Origin" asp-items="@new SelectList(Model.Origins)" class="form-select"></select>
+    </div>
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
+        $(document).ready(function () {
+            $('#originDropdown').change(function () {
+                // Get the selected value from the dropdown
+                var selectedOrigin = $(this).val();
+                // Call the controller action using AJAX
+                $.ajax({
+                    url: '@Url.Action("UpdateChart", "Dashboard")',
+                    type: 'GET',
+                    data: { origin: selectedOrigin },
+                    success: function (data) {
+                        // Update the chart using the data returned from the controller
+                        updateChart(data);
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
 
-        var lineColors = [
-            '#0000CC',
-            '#00CC00',
-            '#CC0000',
-            '#CCCC00',
-            '#CC00CC',
-            '#00CCCC',
-        ];
+        function updateChart(data)
+        {
+            var times = data.times;
+            var values = data.values;
+            var origin = data.origin;
+
+            myChart.data.datasets[0].label = 'Saldo ' + origin;
+            myChart.data.labels = times;
+            myChart.data.datasets[0].data = values;
+            myChart.update();
+        }
+
+        var ctx = document.getElementById('myChart').getContext('2d');
 
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -38,18 +65,14 @@
             {
                 labels: @Html.Raw(Json.Serialize(Model.Times)),
                 datasets: [
-                    @for (int i = 0; i < Model.Values.Count; i++)
                     {
-                        <text>
-                        {
-                            label: 'Saldo @Model.Origins[i]',
-                            data: @Html.Raw(Json.Serialize(Model.Values[i])),
-                            borderColor: lineColors[@i],
-                            //borderColor: 'rgba(160, 0, 160, 1)',
-                            borderWidth: 3,
-                            fill: false
-                        },
-                        </text>
+                        label: 'Saldo @Model.Origin',
+                        data: @Html.Raw(Json.Serialize(Model.Values)),
+                        borderColor: '#0000CC',
+                        pointBackgroundColor: '#0000CC',
+                        borderWidth: 2,
+                        pointSize: 4,
+                        fill: false
                     }
                 ]
             },
