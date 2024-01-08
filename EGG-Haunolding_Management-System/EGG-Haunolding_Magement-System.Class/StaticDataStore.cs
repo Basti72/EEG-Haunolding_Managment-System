@@ -87,11 +87,11 @@ namespace EGG_Haunolding_Management_System.Class
             _data.Add(item);
         }
 
-        public List<DataItem> GetAllLastDataByOrigin(string origin, int amount)
+        public List<DataItem> GetAllLastDataByOrigin(string origin, int amount, int compressionLevel)
         {
             List<DataItem> data = GetDataByOrigin(origin);
 
-            return data.Where(x => x.Origin == origin)
+            return data.Where(x => x.Origin == origin && x.CompressionLevel == x.CompressionLevel)
                 .OrderByDescending(x => x.Time)
                 .Take(amount)
                 .ToList();

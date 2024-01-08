@@ -5,7 +5,7 @@
         List<DataItem> GetAllData();
         List<DataItem> GetAllDataByOrigin(string origin);
         List<DataItem> GetCurrentDataByOriginByDay(string origin, DateTime time, int compressionLevel);
-        List<DataItem> GetAllLastDataByOrigin(string origin, int amount);
+        List<DataItem> GetAllLastDataByOrigin(string origin, int amount, int compressionLevel);
         void DeleteAllDataByOriginByDay(string origin, DateTime time, int compressionLevel);
         void InsertData(DataItem item);
         DataItem? GetCurrentDataByOrigin(string origin);

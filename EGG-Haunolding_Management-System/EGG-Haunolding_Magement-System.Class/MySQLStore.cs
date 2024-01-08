@@ -128,17 +128,18 @@ namespace EGG_Haunolding_Management_System.Class
             connection.Execute("INSERT INTO Data VALUES (@Origin, @Time, @Saldo, @SaldoAvg, @CompressionLevel)", entry);
         }
 
-        public List<DataItem> GetAllLastDataByOrigin(string origin, int amount)
+        public List<DataItem> GetAllLastDataByOrigin(string origin, int amount, int compressionLevel)
         {
             using MySqlConnection connection = new(ConnectionString);
 
             var entry = new
             {
                 Origin = origin,
-                Amount = amount
+                Amount = amount,
+                compressionLevel = compressionLevel
             };
 
-            return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin ORDER BY TIME DESC LIMIT @Amount").ToList();
+            return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND CompressionLevel = @CompressionLevel ORDER BY TIME DESC LIMIT @Amount").ToList();
         }
     }
 }
