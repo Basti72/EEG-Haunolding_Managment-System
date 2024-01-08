@@ -1,5 +1,9 @@
 ﻿using EGG_Haunolding_Management_System.Class;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using System.Globalization;
+using System.Reflection;
 
 namespace EGG_Haunolding_Management_System.Class
 {
