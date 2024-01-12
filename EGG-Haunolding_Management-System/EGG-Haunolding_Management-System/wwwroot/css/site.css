@@ -17,13 +17,45 @@ body {
   margin-bottom: 60px;
 }
 
+.household-tiles-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
 .household-tile {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 20px;
     margin: 10px;
     cursor: pointer;
+    flex-basis: calc(33% - 20px);
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
 }
 
 .household-tile:hover {
+    transform: scale(1.05);
     background-color: #f0f0f0;
+}
+
+@media (max-width: 600px) {
+    .household-tile {
+        flex-basis: calc(50% - 20px);
+    }
+}
+
+.total-value-display {
+    text-align: center;
+    margin: 40px 0;
+}
+
+    .total-value-display h1 {
+        font-size: 2em;
+        color: #333; /* Dunkelgrau */
+    }
+
+.total-value {
+    font-size: 4em;
+    font-weight: bold;
 }

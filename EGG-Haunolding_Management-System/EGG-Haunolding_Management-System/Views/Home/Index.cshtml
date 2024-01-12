@@ -1,11 +1,40 @@
 ﻿@model HomeViewModel
 
-<h2>Total Value: @Model.TotalValue</h2>
+<div class="total-value-display">
+    <h1>Total Value</h1>
+    <p class="total-value" id="animatedValue">0</p>
+</div>
 
-@foreach (var household in Model.Households)
-{
-    <div class="household-tile" onclick="location.href='@Url.Action("Details", "Home", new { name = household.Name })'">
-        <h3>@household.Name</h3>
-        <p>Value: @household.Value</p>
-    </div>
+<div class="household-tiles-container">
+    @foreach (var household in Model.Households)
+    {
+        <div class="household-tile" onclick="location.href='@Url.Action("Test", "Home", new { name = household.Name })'">
+            <h3>@household.Name</h3>
+            <p>Value: @household.Value</p>
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    <script>
+        window.onload = function() {
+        var valueDisplay = document.getElementById('animatedValue');
+        var endValue = @Model.TotalValue; // Ersetzen Sie dies durch den tatsächlichen Wert
+        var currentValue = 0;
+        var duration = 500; // Dauer der Animation in Millisekunden
+        var frameRate = 60; // Anzahl der Updates pro Sekunde
+        var totalFrames = duration / (1000 / frameRate);
+        var increment = endValue / totalFrames;
+
+        var interval = setInterval(function() {
+            currentValue += increment;
+            if (currentValue >= endValue) {
+                currentValue = endValue;
+                clearInterval(interval);
+            }
+            valueDisplay.textContent = currentValue.toFixed(0);
+        }, 1000 / frameRate);
+    };
+    </script>
 }

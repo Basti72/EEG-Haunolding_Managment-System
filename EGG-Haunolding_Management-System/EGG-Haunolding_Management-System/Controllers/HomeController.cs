@@ -34,4 +34,5 @@ namespace EGG_Haunolding_Management_System.Controllers
             return View(viewModel);
         }
     }
+
 }
