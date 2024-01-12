@@ -16,3 +16,14 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.household-tile {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.household-tile:hover {
+    background-color: #f0f0f0;
+}

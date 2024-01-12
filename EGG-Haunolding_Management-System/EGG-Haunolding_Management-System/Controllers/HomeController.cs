@@ -1,4 +1,5 @@
-﻿using EGG_Haunolding_Management_System.Models;
+﻿using EGG_Haunolding_Management_System.Class;
+using EGG_Haunolding_Management_System.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,27 +7,31 @@ namespace EGG_Haunolding_Management_System.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IDataStore _dataStore;
+        public HomeController(IDataStore dataStore)
         {
-            _logger = logger;
+            _dataStore = dataStore;
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
+            List<Household> households = new List<Household>();
+            string[] origins = _dataStore.GetOrigins();
+            foreach(string origin in origins)
+            {
+                List<DataItem> item = _dataStore.GetAllLastDataByOrigin(origin, 1, 0);
+                int value = item[0].Saldo;
+                households.Add(new Household(origin, value));
+            }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            var viewModel = new HomeViewModel
+            {
+                Households = households
+            };
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            viewModel.TotalValue = viewModel.Households.Sum(h => h.Value);
+
+            return View(viewModel);
         }
     }
 }
