@@ -11,18 +11,24 @@
 </head>
 <body>
     <style>
-    /* Adjust the height of the chart container */
+        /* Adjust the height of the chart container */
         #chartContainer {
-            height: calc(100vh - 80px); /* Adjust the percentage or pixel value as needed */
-            margin-top: 20px; /* Adjust to leave space for the navbar */
+            height: calc(100vh - 140px); /* subtract the height of the navbar and the dropdown menu */
+            margin-top: 20px;
+        }
+        #originDropdown {
+            height: 40px;
         }
     </style>
 
+    <div class="dropDownMenu">
+        <div class="form-group">
+            <select id="originDropdown" asp-for="Origin" asp-items="@new SelectList(Model.Origins)" class="form-select"></select>
+        </div>
+    </div>
+    
     <div id="chartContainer">
         <canvas id="myChart"></canvas>
-    </div>
-    <div class="form-group">
-        <select id="originDropdown" asp-for="Origin" asp-items="@new SelectList(Model.Origins)" class="form-select"></select>
     </div>
     <script>
         $(document).ready(function () {
