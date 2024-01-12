@@ -49,6 +49,15 @@ namespace EGG_Haunolding_Management_System.Controllers
             data.Origins = m_DataStore.GetOrigins().ToList();
             return Json(data);
         }
+
+        public IActionResult GetLatestData(string origin)
+        {
+            Console.WriteLine($"LatestData origin: {origin}");
+            var data = GetData(origin);
+            data.Origins = m_DataStore.GetOrigins().ToList();
+            Console.WriteLine($"LastValue: {data.Values[data.Values.Count - 1]}");
+            return Json(data);
+        }
     }
 
 }

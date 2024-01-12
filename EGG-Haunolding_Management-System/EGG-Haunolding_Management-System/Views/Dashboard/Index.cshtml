@@ -63,8 +63,29 @@
             myChart.update();
         }
 
-        var ctx = document.getElementById('myChart').getContext('2d');
+        // update on Intervall
+        function updateChartData() {
+            var selectedOrigin = $('#originDropdown').val();
 
+            $.ajax({
+                url: '@Url.Action("GetLatestData", "Dashboard")',
+                type: 'GET',
+                data: { origin: selectedOrigin },
+                success: function (data) {
+                    updateChart(data);
+                },
+                error: function (error) {
+                    console.error('Error fetching latest data:', error);
+                }
+            });
+        }
+        // Initial call to fetch and update data
+        updateChartData();
+        // Set interval to periodically fetch and update data (every 10 seconds in this example)
+        setInterval(updateChartData, 10000);
+
+        // The actual Chart code
+        var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
             data: 
