@@ -1,7 +1,7 @@
 ﻿@model HomeViewModel
 
 <div class="total-value-display">
-    <h1>Total Value</h1>
+    <h1>Gesamt</h1>
     <p class="total-value" id="animatedValue">0</p>
 </div>
 
@@ -10,7 +10,7 @@
     {
         <div class="household-tile" onclick="location.href='@Url.Action("Test", "Home", new { name = household.Name })'">
             <h3>@household.Name</h3>
-            <p>Value: @household.Value</p>
+            <p>Wert: @household.Value</p>
         </div>
     }
 </div>
