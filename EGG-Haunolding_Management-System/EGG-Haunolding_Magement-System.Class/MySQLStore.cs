@@ -178,11 +178,7 @@ namespace EGG_Haunolding_Management_System.Class
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("Duplicate key"))
-                    return false;
-
-                else
-                    throw new Exception(ex.Message);
+                return false;
             }
 
             return true;

@@ -31,13 +31,13 @@ namespace EGG_Haunolding_Management_System.Controllers
                 return View(nameof(Index));
             }
 
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
         }
 
         public async Task<IActionResult> Logout()
         {
             await UserData.Logout(HttpContext);
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(LoginController.Index), "Login");
         }
     }
 }
