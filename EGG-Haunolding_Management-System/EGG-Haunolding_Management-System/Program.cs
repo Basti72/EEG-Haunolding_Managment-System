@@ -1,4 +1,5 @@
 using EGG_Haunolding_Management_System.Class;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +27,14 @@ builder.Services.AddHostedService<DBBackroundService>();
 
 string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringExtern.txt";
 builder.Services.AddTransient<IDataStore>(ctx => { return new MySQLStore(path); });
+builder.Services.AddTransient<IUserStore>(ctx => { return new MySQLStore(path); });
 builder.Services.AddTransient<IMQTTCom>(ctx => { return new MySQLStore(path); });
+
+builder.Services.AddTransient<AuthenticationLogic>();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
 
 
 var app = builder.Build();
@@ -40,18 +48,19 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Dashboard}/{action=Index}/{id?}");
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(
+//        name: "default",
+//        pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+//});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

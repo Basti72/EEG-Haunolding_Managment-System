@@ -3,7 +3,7 @@ using Dapper;
 
 namespace EGG_Haunolding_Management_System.Class
 {
-    public class MySQLStore : IDataStore, IMQTTCom
+    public class MySQLStore : IDataStore, IMQTTCom, IUserStore
     {
         private readonly string ConnectionString;
         private Dictionary<string, DateTime> LastEntryByOrigin;
@@ -140,6 +140,52 @@ namespace EGG_Haunolding_Management_System.Class
             };
 
             return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND CompressionLevel = @CompressionLevel ORDER BY TIME DESC LIMIT @Amount", entry).ToList();
+        }
+
+        public UserItem? GetUser(string username, string password)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username
+            };
+
+            UserItem item = connection.QueryFirstOrDefault<UserItem>("SELECT * FROM users WHERE Username = @Username", entry);
+
+            if (item == null || !Util.DoesPasswordMatch(password, item.Hash, item.Salt))
+                item = null;
+
+
+            return item;
+        }
+
+        public bool AddUser(UserItem item)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = item.Username,
+                Hash = item.Hash,
+                Salt = item.Salt,
+                Role = item.Role
+            };
+
+            try
+            {
+                connection.ExecuteScalar("INSERT INTO users VALUES(@Username, @Hash, @Salt, @Role)", entry);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Duplicate key"))
+                    return false;
+
+                else
+                    throw new Exception(ex.Message);
+            }
+
+            return true;
         }
     }
 }

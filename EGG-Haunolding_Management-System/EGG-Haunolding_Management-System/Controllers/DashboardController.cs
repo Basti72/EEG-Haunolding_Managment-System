@@ -8,7 +8,7 @@ namespace EGG_Haunolding_Management_System.Controllers
     public class DashboardController : Controller
     {
         private readonly IDataStore m_DataStore;
-        public DashboardController(IDataStore dataStore)
+        public DashboardController(IDataStore dataStore, IUserStore userStore)
         {
             m_DataStore = dataStore;
         }

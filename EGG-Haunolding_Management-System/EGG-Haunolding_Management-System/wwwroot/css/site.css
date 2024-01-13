@@ -16,3 +16,14 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.login-form-container {
+    background-color: #f1f2f3;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-form-container h1 {
+    margin-bottom: 30px;
+}

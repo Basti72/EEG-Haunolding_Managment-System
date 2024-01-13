@@ -1,5 +1,6 @@
 ﻿using EGG_Haunolding_Management_System.Class;
 using System.Globalization;
+using System.Security.Cryptography;
 
 namespace EGG_Haunolding_Management_System.Class
 {
@@ -21,6 +22,29 @@ namespace EGG_Haunolding_Management_System.Class
             dataItem.SaldoAvg = jsonDataItem.saldoavg;
             dataItem.Origin = "dummy";
             return dataItem;
+        }
+        public static string CreateHash(string password, out string salt)
+        {
+            byte[] byteSalt = RandomNumberGenerator.GetBytes(16);
+            salt = ToHex(byteSalt);
+            return CreateHash(password, byteSalt);
+        }
+
+        private static string CreateHash(string password, byte[] salt)
+        {
+            byte[] hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, 600000, HashAlgorithmName.SHA256, 16);
+            return ToHex(hash);
+        }
+
+        private static string ToHex(byte[] hash)
+        {
+            return Convert.ToHexString(hash);
+        }
+
+        public static bool DoesPasswordMatch(string password, string hash, string salt)
+        {
+            byte[] saltBytes = Convert.FromHexString(salt);
+            return CreateHash(password, saltBytes) == hash;
         }
     }
 }
