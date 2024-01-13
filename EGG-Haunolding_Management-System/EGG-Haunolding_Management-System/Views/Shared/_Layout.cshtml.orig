@@ -25,11 +25,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+<<<<<<< HEAD
                         @if (Context.User.Identity.IsAuthenticated)
                         {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Übersicht</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
                         }
                         @if (authentication.TryGetRoleOfUser(Context) is string role && role == "Admin")
                         {
@@ -54,6 +55,14 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
                             </li>
                         }
+=======
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Übersicht</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                        </li>
+>>>>>>> Design
                     </ul>
                 </div>
             </div>

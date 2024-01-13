@@ -33,11 +33,10 @@ namespace EGG_Haunolding_Management_System.Controllers
             if (!UserStore.AddUser(new UserItem(model.Username, hash, salt, model.Role)))
             {
                 ModelState.AddModelError("", "This username already exits!");
-                return View(nameof(Index));
+                return View(nameof(Index), model);
             }
 
-
-            return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
+            return View(nameof(Index), new RegistrationViewModel());
         }
 
         public IActionResult Import()
@@ -70,7 +69,7 @@ namespace EGG_Haunolding_Management_System.Controllers
                             }
                         }
 
-                        return RedirectToAction("Index", "Dashboard");
+                        return View(nameof(Index), new RegistrationViewModel());
                     }
                 }
                 else

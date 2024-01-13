@@ -31,7 +31,7 @@ namespace EGG_Haunolding_Management_System.Controllers
                 return View(nameof(Index));
             }
 
-            return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         public async Task<IActionResult> Logout()

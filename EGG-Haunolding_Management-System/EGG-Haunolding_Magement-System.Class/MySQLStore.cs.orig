@@ -137,6 +137,8 @@ namespace EGG_Haunolding_Management_System.Class
                 Origin = origin,
                 CompressionLevel = compressionLevel,
                 Amount = amount,
+<<<<<<< HEAD
+                CompressionLevel = compressionLevel
             };
 
             return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND CompressionLevel = @CompressionLevel ORDER BY TIME DESC LIMIT @Amount", entry).ToList();
@@ -182,6 +184,11 @@ namespace EGG_Haunolding_Management_System.Class
             }
 
             return true;
+=======
+            };
+
+            return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND CompressionLevel = @CompressionLevel ORDER BY TIME DESC LIMIT @Amount", entry).ToList();
+>>>>>>> Design
         }
     }
 }
