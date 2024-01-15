@@ -36,7 +36,6 @@ builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,12 +47,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllerRoute(
-//        name: "default",
-//        pattern: "{controller=Dashboard}/{action=Index}/{id?}");
-//});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

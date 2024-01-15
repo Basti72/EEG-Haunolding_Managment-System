@@ -15,6 +15,9 @@ namespace EGG_Haunolding_Management_System.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             return View(new LoginViewModel());
         }
 
