@@ -6,50 +6,100 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>Line Chart</title>
 </head>
 <body>
     <style>
-    /* Adjust the height of the chart container */
+        /* Adjust the height of the chart container */
         #chartContainer {
-            height: calc(100vh - 80px); /* Adjust the percentage or pixel value as needed */
-            margin-top: 20px; /* Adjust to leave space for the navbar */
+            height: calc(100vh - 140px); /* subtract the height of the navbar and the dropdown menu */
+            margin-top: 20px;
+        }
+        #originDropdown {
+            height: 40px;
         }
     </style>
 
+    <div class="dropDownMenu">
+        <div class="form-group">
+            <select id="originDropdown" asp-for="Origin" asp-items="@new SelectList(Model.Origins)" class="form-select"></select>
+        </div>
+    </div>
+    
     <div id="chartContainer">
         <canvas id="myChart"></canvas>
     </div>
     <script>
+        $(document).ready(function () {
+            $('#originDropdown').change(function () {
+                // Get the selected value from the dropdown
+                var selectedOrigin = $(this).val();
+                // Call the controller action using AJAX
+                $.ajax({
+                    url: '@Url.Action("UpdateChart", "Dashboard")',
+                    type: 'GET',
+                    data: { origin: selectedOrigin },
+                    success: function (data) {
+                        // Update the chart using the data returned from the controller
+                        updateChart(data);
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+
+        function updateChart(data)
+        {
+            var times = data.times;
+            var values = data.values;
+            var origin = data.origin;
+
+            myChart.data.datasets[0].label = 'Saldo ' + origin;
+            myChart.data.labels = times;
+            myChart.data.datasets[0].data = values;
+            myChart.update();
+        }
+
+        // update on Intervall
+        function updateChartData() {
+            var selectedOrigin = $('#originDropdown').val();
+
+            $.ajax({
+                url: '@Url.Action("GetLatestData", "Dashboard")',
+                type: 'GET',
+                data: { origin: selectedOrigin },
+                success: function (data) {
+                    updateChart(data);
+                },
+                error: function (error) {
+                    console.error('Error fetching latest data:', error);
+                }
+            });
+        }
+        // Initial call to fetch and update data
+        updateChartData();
+        // Set interval to periodically fetch and update data (every 10 seconds in this example)
+        setInterval(updateChartData, 10000);
+
+        // The actual Chart code
         var ctx = document.getElementById('myChart').getContext('2d');
-
-        var lineColors = [
-            '#0000CC',
-            '#00CC00',
-            '#CC0000',
-            '#CCCC00',
-            '#CC00CC',
-            '#00CCCC',
-        ];
-
         var myChart = new Chart(ctx, {
             type: 'line',
             data: 
             {
                 labels: @Html.Raw(Json.Serialize(Model.Times)),
                 datasets: [
-                    @for (int i = 0; i < Model.Values.Count; i++)
                     {
-                        <text>
-                        {
-                            label: 'Saldo @Model.Origins[i]',
-                            data: @Html.Raw(Json.Serialize(Model.Values[i])),
-                            borderColor: lineColors[@i],
-                            //borderColor: 'rgba(160, 0, 160, 1)',
-                            borderWidth: 3,
-                            fill: false
-                        },
-                        </text>
+                        label: 'Saldo @Model.Origin',
+                        data: @Html.Raw(Json.Serialize(Model.Values)),
+                        borderColor: '#0000CC',
+                        pointBackgroundColor: '#0000CC',
+                        borderWidth: 2,
+                        pointSize: 4,
+                        fill: false
                     }
                 ]
             },

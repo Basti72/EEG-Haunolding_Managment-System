@@ -13,37 +13,52 @@ namespace EGG_Haunolding_Management_System.Controllers
             m_DataStore = dataStore;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string name)
         {
-            // Get all data by origin
-            List<List<DataItem>> dataList = new List<List<DataItem>>();
             var origins = m_DataStore.GetOrigins();
-            foreach(var origin in origins)
-                dataList.Add(m_DataStore.GetAllDataByOrigin(origin));
+            if (name == null)
+                name = origins[0];
+            DashboardViewModel model = GetData(name);
+            model.Origins = origins.ToList();
+            return View(model);
+        }
+
+        private DashboardViewModel GetData(string origin)
+        {
+            var dataList = m_DataStore.GetAllLastDataByOrigin(origin, 100, 0);
             // Assign data from DB to local variables
             var times = new List<string>();
-            var values = new List<List<int>>();
-            for(int i = 0; i < dataList.Count; i++)
+            var values = new List<int>();
+            for (int i = 0; i < dataList.Count; i++)
             {
-                List<int> ints = new List<int>();
-                for(int j = 0; j < dataList[i].Count; j++)
-                {
-                    // Only assign time once
-                    if (i == 0)
-                        times.Add(dataList[i][j].Time.ToString("yyyy-MM-dd HH:mm:ss"));
-                    ints.Add(dataList[i][j].Saldo);
-                }
-                values.Add(ints);
+                times.Add(dataList[i].Time.ToString("yyyy-MM-dd HH:mm:ss"));
+                values.Add(dataList[i].Saldo);
             }
-
+            times.Reverse();
+            values.Reverse();
             var model = new DashboardViewModel
             {
                 Times = times,
                 Values = values,
-                Origins = origins.ToList()
+                Origin = origin
             };
+            return model;
+        }
 
-            return View(model);
+        public IActionResult UpdateChart(string origin)
+        {
+            var data = GetData(origin);
+            data.Origins = m_DataStore.GetOrigins().ToList();
+            return Json(data);
+        }
+
+        public IActionResult GetLatestData(string origin)
+        {
+            Console.WriteLine($"LatestData origin: {origin}");
+            var data = GetData(origin);
+            data.Origins = m_DataStore.GetOrigins().ToList();
+            Console.WriteLine($"LastValue: {data.Values[data.Values.Count - 1]}");
+            return Json(data);
         }
     }
 
