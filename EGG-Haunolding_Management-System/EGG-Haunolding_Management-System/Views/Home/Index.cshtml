@@ -1,8 +1,7 @@
 ﻿@model HomeViewModel
 
 <div class="total-value-display">
-    <h1>Gesamt</h1>
-    <p class="total-value" id="animatedValue">0</p>
+    <h1>Gesamt: @Model.TotalValue</h1>
 </div>
 
 <div class="household-tiles-container">
@@ -15,26 +14,43 @@
     }
 </div>
 
-
 @section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        window.onload = function() {
-        var valueDisplay = document.getElementById('animatedValue');
-        var endValue = @Model.TotalValue; // Ersetzen Sie dies durch den tatsächlichen Wert
-        var currentValue = 0;
-        var duration = 500; // Dauer der Animation in Millisekunden
-        var frameRate = 60; // Anzahl der Updates pro Sekunde
-        var totalFrames = duration / (1000 / frameRate);
-        var increment = endValue / totalFrames;
+        function updateHouseholdData() {
+            $.ajax({
+                url: '@Url.Action("GetHouseholdData", "Home")', // Stellen Sie sicher, dass die URL korrekt ist
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Aktualisieren Sie den Gesamtwert
+                    $('.total-value-display h1').text('Gesamt: ' + data.totalValue);
 
-        var interval = setInterval(function() {
-            currentValue += increment;
-            if (currentValue >= endValue) {
-                currentValue = endValue;
-                clearInterval(interval);
-            }
-            valueDisplay.textContent = currentValue.toFixed(0);
-        }, 1000 / frameRate);
-    };
+                    // Entfernen Sie alle alten Kacheln
+                    $('.household-tiles-container').empty();
+
+                    // Fügen Sie die neuen Kacheln hinzu
+                    data.households.forEach(function (household) {
+                        $('.household-tiles-container').append(
+                            '<div class="household-tile" onclick="location.href=\'@Url.Action("Index", "Dashboard", new { name = "' + household.name + '" })\'">' +
+                            '<h3>' + household.name + '</h3>' +
+                            '<p>Wert: ' + household.value + '</p>' +
+                            '</div>'
+                        );
+                    });
+                },
+                error: function () {
+                    console.log("Fehler beim Abrufen der Daten.");
+                }
+            });
+        }
+
+        $(function () {
+            // Rufen Sie die Funktion zum ersten Mal auf, um die Daten zu initialisieren.
+            updateHouseholdData();
+
+            // Richten Sie das periodische Update ein
+            setInterval(updateHouseholdData, 5000);
+        });
     </script>
 }
