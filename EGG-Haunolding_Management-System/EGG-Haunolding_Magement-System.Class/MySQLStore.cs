@@ -17,7 +17,15 @@ namespace EGG_Haunolding_Management_System.Class
         {
             using MySqlConnection connection = new(ConnectionString);
 
-            return connection.Query<DataItem>("SELECT * FROM Data").ToList();
+            try
+            {
+                return connection.Query<DataItem>("SELECT * FROM Data").ToList();
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public List<DataItem> GetAllDataByOrigin(string origin)
@@ -26,7 +34,15 @@ namespace EGG_Haunolding_Management_System.Class
 
             var entry = new {Origin = origin};
 
-            return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin", entry).ToList();
+            try
+            {
+                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin", entry).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public DataItem? GetCurrentDataByOrigin(string origin)
@@ -35,7 +51,15 @@ namespace EGG_Haunolding_Management_System.Class
 
             var entry = new { Origin = origin };
 
-            return connection.QueryFirstOrDefault<DataItem>("SELECT * FROM Data WHERE Origin = @Origin ORDER BY TIME DESC", entry);
+            try
+            {
+                return connection.QueryFirstOrDefault<DataItem>("SELECT * FROM Data WHERE Origin = @Origin ORDER BY TIME DESC", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public List<DataItem> GetCurrentDataByOriginByDay(string origin, DateTime time, int compressionLevel)
@@ -49,7 +73,15 @@ namespace EGG_Haunolding_Management_System.Class
                 CompressionLevel = compressionLevel
             };
 
-            return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry).ToList();
+            try
+            {
+                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public void DeleteAllDataByOriginByDay(string origin, DateTime time, int compressionLevel)
@@ -63,14 +95,29 @@ namespace EGG_Haunolding_Management_System.Class
                 CompressionLevel = compressionLevel
             };
 
-            connection.Execute("DELETE FROM Data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry);
+            try
+            {
+                connection.Execute("DELETE FROM Data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         public string[] GetOrigins()
         {
             using MySqlConnection connection = new(ConnectionString);
 
-            return connection.Query<string>("SELECT DISTINCT Origin FROM Data").ToArray();
+            try
+            {
+                return connection.Query<string>("SELECT DISTINCT Origin FROM Data").ToArray();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public void InsertIntoDatabase(DataItem item)
@@ -125,7 +172,14 @@ namespace EGG_Haunolding_Management_System.Class
                 CompressionLevel = item.CompressionLevel
             };
 
-            connection.Execute("INSERT INTO Data VALUES (@Origin, @Time, @Saldo, @SaldoAvg, @CompressionLevel)", entry);
+            try
+            {
+                connection.Execute("INSERT INTO Data VALUES (@Origin, @Time, @Saldo, @SaldoAvg, @CompressionLevel)", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         public List<DataItem> GetAllLastDataByOrigin(string origin, int amount, int compressionLevel)
@@ -139,7 +193,15 @@ namespace EGG_Haunolding_Management_System.Class
                 Amount = amount,
             };
 
-            return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND CompressionLevel = @CompressionLevel ORDER BY TIME DESC LIMIT @Amount", entry).ToList();
+            try
+            {
+                return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND CompressionLevel = @CompressionLevel ORDER BY TIME DESC LIMIT @Amount", entry).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public UserItem? GetUser(string username, string password)
