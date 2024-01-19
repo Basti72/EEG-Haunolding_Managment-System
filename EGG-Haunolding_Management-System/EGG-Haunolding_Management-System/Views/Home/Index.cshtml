@@ -23,21 +23,26 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    // Aktualisieren Sie den Gesamtwert
-                    $('.total-value-display h1').text('Gesamt: ' + data.totalValue);
+                    // Überprüfen Sie, ob die Antwort nicht null ist
+                    if (data && data.households) {
+                        // Aktualisieren Sie den Gesamtwert
+                        $('.total-value-display h1').text('Gesamt: ' + data.totalValue);
 
-                    // Entfernen Sie alle alten Kacheln
-                    $('.household-tiles-container').empty();
+                        // Entfernen Sie alle alten Kacheln
+                        $('.household-tiles-container').empty();
 
-                    // Fügen Sie die neuen Kacheln hinzu
-                    data.households.forEach(function (household) {
-                        $('.household-tiles-container').append(
-                            '<div class="household-tile" onclick="location.href=\'@Url.Action("Index", "Dashboard", new { name = "' + household.name + '" })\'">' +
-                            '<h3>' + household.name + '</h3>' +
-                            '<p>Wert: ' + household.value + '</p>' +
-                            '</div>'
-                        );
-                    });
+                        // Fügen Sie die neuen Kacheln hinzu
+                        data.households.forEach(function (household) {
+                            $('.household-tiles-container').append(
+                                '<div class="household-tile" onclick="location.href=\'@Url.Action("Index", "Dashboard", new { name = "' + household.name + '" })\'">' +
+                                '<h3>' + household.name + '</h3>' +
+                                '<p>Wert: ' + household.value + '</p>' +
+                                '</div>'
+                            );
+                        });
+                    } else {
+                        console.log("Keine neuen Daten zum Aktualisieren.");
+                    }
                 },
                 error: function () {
                     console.log("Fehler beim Abrufen der Daten.");
