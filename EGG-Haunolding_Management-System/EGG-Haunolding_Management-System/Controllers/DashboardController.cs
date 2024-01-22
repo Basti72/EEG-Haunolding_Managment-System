@@ -16,9 +16,13 @@ namespace EGG_Haunolding_Management_System.Controllers
         public ActionResult Index(string name)
         {
             var origins = m_DataStore.GetOrigins();
+            if (origins == null)
+                return View("NoDataFound");
             if (name == null)
                 name = origins[0];
             DashboardViewModel model = GetData(name);
+            if (model == null)
+                return View("NoDataFound");
             model.Origins = origins.ToList();
             return View(model);
         }
@@ -26,6 +30,8 @@ namespace EGG_Haunolding_Management_System.Controllers
         private DashboardViewModel GetData(string origin)
         {
             var dataList = m_DataStore.GetAllLastDataByOrigin(origin, 100, 0);
+            if(dataList == null)
+                return null;
             // Assign data from DB to local variables
             var times = new List<string>();
             var values = new List<int>();
@@ -48,16 +54,18 @@ namespace EGG_Haunolding_Management_System.Controllers
         public IActionResult UpdateChart(string origin)
         {
             var data = GetData(origin);
+            if (data == null) 
+                return View("NoDataFound");
             data.Origins = m_DataStore.GetOrigins().ToList();
             return Json(data);
         }
 
         public IActionResult GetLatestData(string origin)
         {
-            Console.WriteLine($"LatestData origin: {origin}");
             var data = GetData(origin);
+            if (data == null)
+                return null;
             data.Origins = m_DataStore.GetOrigins().ToList();
-            Console.WriteLine($"LastValue: {data.Values[data.Values.Count - 1]}");
             return Json(data);
         }
     }
