@@ -33,8 +33,9 @@
 
                         // Fügen Sie die neuen Kacheln hinzu
                         data.households.forEach(function (household) {
+                            var url = '@Url.Action("Index", "Dashboard")' + '?name=' + encodeURIComponent(household.name);
                             $('.household-tiles-container').append(
-                                '<div class="household-tile" onclick="location.href=\'@Url.Action("Index", "Dashboard", new { name = "' + household.name + '" })\'">' +
+                                '<div class="household-tile" onclick="location.href=\'' + url + '\'">' +
                                 '<h3>' + household.name + '</h3>' +
                                 '<p>Wert: ' + household.value + '</p>' +
                                 '</div>'
