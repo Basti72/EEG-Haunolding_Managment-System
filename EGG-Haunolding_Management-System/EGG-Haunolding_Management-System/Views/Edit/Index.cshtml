@@ -1,0 +1,38 @@
+﻿@model EditViewModel
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="login-form-container">
+            <h1 class="text-center">Editieren</h1>
+            <form asp-action="DoEdit" class="my-4">
+                <input type="hidden" asp-for="OriginalUsername" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label">Benutzername</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                <label asp-for="Role" class="control-label"></label>
+                <select asp-for="Role" asp-items="Model.Roles"></select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+                <div class="text-center mt-3">
+                    <a asp-controller="ChangePassword" asp-action="Index" asp-route-username="@Model.Username" class="btn btn-secondary">
+                        Passwort ändern
+                    </a>
+                </div>
+            </div>
+                <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary btn-lg">
+                     <i class="bi bi-box-arrow-in-right"></i> Änderungen speichern
+                </button>
+            </div>
+            </form>
+            <div class="text-center mt-3">
+                <a asp-controller="User" asp-action="Index" class="btn btn-link">
+                    Zurück zur Benutzerübersicht
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

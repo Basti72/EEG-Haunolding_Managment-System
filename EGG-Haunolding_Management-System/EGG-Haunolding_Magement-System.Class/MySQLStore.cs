@@ -204,7 +204,7 @@ namespace EGG_Haunolding_Management_System.Class
             }
         }
 
-        public UserItem? GetUser(string username, string password)
+        public UserItem? GetUserWithPassword(string username, string password)
         {
             using MySqlConnection connection = new(ConnectionString);
 
@@ -244,6 +244,83 @@ namespace EGG_Haunolding_Management_System.Class
             }
 
             return true;
+        }
+
+        public List<UserItem> GetUsers()
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            try
+            {
+                return connection.Query<UserItem>("SELECT * FROM users").ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public void DeleteUser(string username)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+            };
+
+            try
+            {
+                connection.ExecuteScalar("DELETE FROM users WHERE username = @Username", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public UserItem GetUser(string username)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+            };
+
+            try
+            {
+                return connection.QueryFirstOrDefault<UserItem>("SELECT * FROM users WHERE username = @Username", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public bool UpdateUser(string oldUsername, string newUsername, string role)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                NewUsername = newUsername,
+                OldUsername = oldUsername,
+                Role = role
+            };
+
+            try
+            {
+                connection.ExecuteScalar("UPDATE users SET username = @NewUsername, ROLE = @Role WHERE Username = @OldUsername", entry);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
         }
     }
 }

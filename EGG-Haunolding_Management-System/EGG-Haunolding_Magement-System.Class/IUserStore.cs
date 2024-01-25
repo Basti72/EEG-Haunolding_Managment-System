@@ -2,8 +2,16 @@
 {
     public interface IUserStore
     {
-        UserItem? GetUser(string username, string password);
+        UserItem? GetUserWithPassword(string username, string password);
 
         bool AddUser(UserItem item);
+
+        List<UserItem> GetUsers();
+
+        void DeleteUser(string username);
+
+        UserItem GetUser(string username);
+
+        bool UpdateUser(string oldUsername, string newUsername, string role);
     }
 }

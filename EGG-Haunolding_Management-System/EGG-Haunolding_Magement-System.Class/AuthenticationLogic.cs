@@ -15,7 +15,7 @@ namespace EGG_Haunolding_Management_System.Class
 
         public async Task<bool> Login(string username, string password, HttpContext httpContext)
         {
-            UserItem? user = UserStore.GetUser(username, password);
+            UserItem? user = UserStore.GetUserWithPassword(username, password);
 
             if (user == null)
                 return false;

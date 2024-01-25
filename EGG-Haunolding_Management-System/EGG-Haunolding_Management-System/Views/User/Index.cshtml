@@ -1,0 +1,35 @@
+﻿@model UserViewModel
+
+<table class="styled-table">
+    <tr>
+        <th>Benutzername</th>
+        <th>Rolle</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.Username</td>
+            <td>@user.Role</td>
+            <td class="centered-cell">
+                <a href="@Url.Action("Edit", new { username = user.Username })" class="btn btn-custom-edit" title="Bearbeiten">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </td>
+            <td class="centered-cell">
+                <a href="@Url.Action("Delete", new { username = user.Username })" class="btn btn-custom-delete" title="Löschen">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+<p>
+    <a href="@Url.Action("Index", "Registration")" class="btn btn-custom-add">
+        <i class="fas fa-plus"></i> Neuen Benutzer anlegen
+    </a>
+</p>
+
+
