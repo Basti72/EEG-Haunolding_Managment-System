@@ -10,6 +10,7 @@ namespace EGG_Haunolding_Management_System.Models
         [Required(ErrorMessage = "Neuer Benutzer muss gesetzt werden")]
         public string Username {  get; set; }
         public string OriginalUsername {  get; set; }
+        [Display(Name = "Rolle: ")]
         public string Role {  get; set; }
         public List<SelectListItem> Roles { get; } = new List<SelectListItem>
         {
