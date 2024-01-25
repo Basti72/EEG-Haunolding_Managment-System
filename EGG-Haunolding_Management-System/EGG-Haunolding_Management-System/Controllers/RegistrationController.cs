@@ -24,7 +24,7 @@ namespace EGG_Haunolding_Management_System.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(nameof(Index));
+                return View(nameof(Index), model);
             }
 
             string salt;
