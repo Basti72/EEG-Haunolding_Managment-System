@@ -33,22 +33,6 @@ namespace EGG_Haunolding_Management_System.Controllers
 
             return View(viewModel);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetHouseholdData()
-        {
-            var households = new List<Household>();
-            string[] origins = _dataStore.GetOrigins();
-            foreach (string origin in origins)
-            {
-                List<DataItem> item = _dataStore.GetAllLastDataByOrigin(origin, 1, 0);
-                int value = item[0].Saldo;
-                households.Add(new Household(origin, value));
-            }
-
-            var totalValue = households.Sum(h => h.Value);
-            return Json(new { TotalValue = totalValue, Households = households });
-        }
     }
 
 }

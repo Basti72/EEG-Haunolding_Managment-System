@@ -18,7 +18,11 @@ body {
 }
 
 .login-form-container {
+<<<<<<< HEAD
+    background-color: #f8f9fa;
+=======
     background-color: #f1f2f3;
+>>>>>>> main
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -27,6 +31,8 @@ body {
 .login-form-container h1 {
     margin-bottom: 30px;
 }
+<<<<<<< HEAD
+=======
 
 .household-tiles-container {
     display: flex;
@@ -70,3 +76,4 @@ body {
     font-size: 4em;
     font-weight: bold;
 }
+>>>>>>> main

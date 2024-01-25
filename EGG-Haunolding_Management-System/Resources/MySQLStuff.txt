@@ -5,10 +5,11 @@ CREATE TABLE `Data` (
 	`Time` DATETIME,
 	`Saldo` INT NULL,
 	`SaldoAvg` INT NULL,
+	`CompressionLevel` INT DEFAULT 0,
     primary key(Origin, Time)
 )
 
-INSERT INTO Data VALUES
+INSERT INTO Data (Origin, Time, Saldo, SaldoAvg) VALUES
 ("Bell", '2023-12-05 12:00:00', 10, 10),
 ("Bell", '2023-12-05 12:00:30', 11, 10),
 ("Bell", '2023-12-05 12:01:00', 8, 10),

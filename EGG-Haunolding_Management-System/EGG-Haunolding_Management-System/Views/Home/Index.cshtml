@@ -1,8 +1,62 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model HomeViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="total-value-display">
+    <h1>Gesamt: @Model.TotalValue</h1>
 </div>
+
+<div class="household-tiles-container">
+    @foreach (var household in Model.Households)
+    {
+        <div class="household-tile" onclick="location.href='@Url.Action("Index", "Dashboard", new { name = household.Name })'">
+            <h3>@household.Name</h3>
+            <p>Wert: @household.Value</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function updateHouseholdData() {
+            $.ajax({
+                url: '@Url.Action("GetHouseholdData", "Home")', // Stellen Sie sicher, dass die URL korrekt ist
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Überprüfen Sie, ob die Antwort nicht null ist
+                    if (data && data.households) {
+                        // Aktualisieren Sie den Gesamtwert
+                        $('.total-value-display h1').text('Gesamt: ' + data.totalValue);
+
+                        // Entfernen Sie alle alten Kacheln
+                        $('.household-tiles-container').empty();
+
+                        // Fügen Sie die neuen Kacheln hinzu
+                        data.households.forEach(function (household) {
+                            var url = '@Url.Action("Index", "Dashboard")' + '?name=' + encodeURIComponent(household.name);
+                            $('.household-tiles-container').append(
+                                '<div class="household-tile" onclick="location.href=\'' + url + '\'">' +
+                                '<h3>' + household.name + '</h3>' +
+                                '<p>Wert: ' + household.value + '</p>' +
+                                '</div>'
+                            );
+                        });
+                    } else {
+                        console.log("Keine neuen Daten zum Aktualisieren.");
+                    }
+                },
+                error: function () {
+                    console.log("Fehler beim Abrufen der Daten.");
+                }
+            });
+        }
+
+        $(function () {
+            // Rufen Sie die Funktion zum ersten Mal auf, um die Daten zu initialisieren.
+            updateHouseholdData();
+
+            // Richten Sie das periodische Update ein
+            setInterval(updateHouseholdData, 5000);
+        });
+    </script>
+}

@@ -8,27 +8,65 @@ namespace EGG_Haunolding_Management_System.Controllers
     public class DashboardController : Controller
     {
         private readonly IDataStore m_DataStore;
-        public DashboardController(IDataStore dataStore)
+        public DashboardController(IDataStore dataStore, IUserStore userStore)
         {
             m_DataStore = dataStore;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string name)
         {
-            var data = m_DataStore.GetAllDataByOrigin("Oberndorfer");
+            var origins = m_DataStore.GetOrigins();
+            if (origins == null)
+                return View("NoDataFound");
+            if (name == null)
+                name = origins[0];
+            DashboardViewModel model = GetData(name);
+            if (model == null)
+                return View("NoDataFound");
+            model.Origins = origins.ToList();
+            return View(model);
+        }
 
-            List<DataPoint> timeAndValues = new List<DataPoint>();
-            foreach(var x in data)
-                timeAndValues.Add(new DataPoint { X = Util.ToUnixTimestamp(x.Time), Y = x.Saldo });
-
+        private DashboardViewModel GetData(string origin)
+        {
+            var dataList = m_DataStore.GetAllLastDataByOrigin(origin, 100, 0);
+            if(dataList == null)
+                return null;
+            // Assign data from DB to local variables
+            var times = new List<string>();
+            var values = new List<int>();
+            for (int i = 0; i < dataList.Count; i++)
+            {
+                times.Add(dataList[i].Time.ToString("yyyy-MM-dd HH:mm:ss"));
+                values.Add(dataList[i].Saldo);
+            }
+            times.Reverse();
+            values.Reverse();
             var model = new DashboardViewModel
             {
-                TimeAndValues = timeAndValues,
-                Title = "Saldo",
-                Origin = data[0].Origin
+                Times = times,
+                Values = values,
+                Origin = origin
             };
-            return View(model);
-            
+            return model;
+        }
+
+        public IActionResult UpdateChart(string origin)
+        {
+            var data = GetData(origin);
+            if (data == null) 
+                return View("NoDataFound");
+            data.Origins = m_DataStore.GetOrigins().ToList();
+            return Json(data);
+        }
+
+        public IActionResult GetLatestData(string origin)
+        {
+            var data = GetData(origin);
+            if (data == null)
+                return null;
+            data.Origins = m_DataStore.GetOrigins().ToList();
+            return Json(data);
         }
     }
 

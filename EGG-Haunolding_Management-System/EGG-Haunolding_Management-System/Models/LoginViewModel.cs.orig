@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+=======
+using System.ComponentModel.DataAnnotations;
+>>>>>>> main
 
 namespace EGG_Haunolding_Management_System.Models
 {
@@ -11,5 +16,9 @@ namespace EGG_Haunolding_Management_System.Models
         [Required(ErrorMessage = "Must provide a valid Password")]
         public string? Password { get; set; }
     }
+<<<<<<< HEAD
+}
+=======
 
 }
+>>>>>>> main
