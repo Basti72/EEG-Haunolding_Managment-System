@@ -33,5 +33,25 @@ namespace EGG_Haunolding_Management_System.Controllers
 
             return RedirectToAction("Index", "User");
         }
+
+        public IActionResult ChangePassword(string username)
+        {
+            return View("ChangePassword", new ChangePasswordViewModel { Username = username });
+        }
+
+        public IActionResult SubmitPassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ChangePassword", model);
+            }
+
+            string salt;
+            string hash = Util.CreateHash(model.NewPassword, out salt);
+
+            UserStore.UpdatePassword(model.Username, hash, salt);
+
+            return RedirectToAction("Index", "User");
+        }
     }
 }

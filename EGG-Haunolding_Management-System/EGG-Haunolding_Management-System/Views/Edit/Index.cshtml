@@ -17,7 +17,7 @@
                 <select asp-for="Role" asp-items="Model.Roles"></select>
                 <span asp-validation-for="Role" class="text-danger"></span>
                 <div class="text-center mt-3">
-                    <a asp-controller="ChangePassword" asp-action="Index" asp-route-username="@Model.Username" class="btn btn-secondary">
+                    <a asp-action="ChangePassword" asp-route-username="@Model.Username" class="btn btn-secondary">
                         Passwort ändern
                     </a>
                 </div>

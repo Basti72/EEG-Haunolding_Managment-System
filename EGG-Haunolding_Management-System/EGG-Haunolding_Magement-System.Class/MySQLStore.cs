@@ -1,5 +1,6 @@
 ﻿using MySqlConnector;
 using Dapper;
+using System.Data;
 
 namespace EGG_Haunolding_Management_System.Class
 {
@@ -320,6 +321,27 @@ namespace EGG_Haunolding_Management_System.Class
             {
                 Console.WriteLine(ex.ToString());
                 return false;
+            }
+        }
+
+        public void UpdatePassword(string username, string hash, string salt)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+                Hash = hash,
+                Salt = salt
+            };
+
+            try
+            {
+                connection.ExecuteScalar("UPDATE users SET hash = @Hash, salt = @Salt WHERE username = @Username", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
     }

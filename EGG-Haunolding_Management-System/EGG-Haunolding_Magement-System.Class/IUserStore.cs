@@ -13,5 +13,7 @@
         UserItem GetUser(string username);
 
         bool UpdateUser(string oldUsername, string newUsername, string role);
+
+        void UpdatePassword(string username, string hash, string salt);
     }
 }
