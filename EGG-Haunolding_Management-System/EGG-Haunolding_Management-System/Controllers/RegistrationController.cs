@@ -36,7 +36,7 @@ namespace EGG_Haunolding_Management_System.Controllers
                 return View(nameof(Index), model);
             }
 
-            return View(nameof(Index), new RegistrationViewModel());
+            return RedirectToAction("Index", "User");
         }
 
         public IActionResult Import()

@@ -18,7 +18,7 @@
                 </a>
             </td>
             <td class="centered-cell">
-                <a href="@Url.Action("Delete", new { username = user.Username })" class="btn btn-custom-delete" title="Löschen">
+                <a href="javascript:void(0)" onclick="confirmDelete('@user.Username')" class="btn btn-custom-delete" title="Löschen">
                     <i class="fas fa-trash"></i>
                 </a>
             </td>
@@ -32,4 +32,10 @@
     </a>
 </p>
 
-
+<script>
+    function confirmDelete(username) {
+        if (confirm("Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?")) {
+            window.location.href = '@Url.Action("Delete", "User")' + '?username=' + username;
+        }
+    }
+</script>

@@ -28,11 +28,19 @@ namespace EGG_Haunolding_Management_System.Class
             // Message handling
             _mqttClient.ApplicationMessageReceivedAsync += e =>
             {
-                Console.WriteLine("Received application message.");
-                var response = JsonSerializer.Deserialize<JsonDataItem>(Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment.ToArray()));
-                var dataItem = response.ToDataItem();
-                _mqttCom.InsertIntoDatabase(dataItem);
-                Console.WriteLine($"Item inserted: Origin={dataItem.Origin} | Time={dataItem.Time} | Saldo={dataItem.Saldo} | SaldoAvg={dataItem.SaldoAvg}");
+                try
+                {
+                    Console.WriteLine("Received application message.");
+                    var response = JsonSerializer.Deserialize<JsonDataItem>(Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment.ToArray()));
+                    var dataItem = response.ToDataItem();
+                    _mqttCom.InsertIntoDatabase(dataItem);
+                    Console.WriteLine($"Item inserted: Origin={dataItem.Origin} | Time={dataItem.Time} | Saldo={dataItem.Saldo} | SaldoAvg={dataItem.SaldoAvg}");
+                }
+                catch (Exception ex)
+                {
+
+                }
+                    
                 return Task.CompletedTask;
             };
 
