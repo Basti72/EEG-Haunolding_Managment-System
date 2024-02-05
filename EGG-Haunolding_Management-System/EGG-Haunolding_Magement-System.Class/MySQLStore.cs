@@ -1,10 +1,11 @@
 ﻿using MySqlConnector;
 using Dapper;
 using System.Data;
+using System.Security.Policy;
 
 namespace EGG_Haunolding_Management_System.Class
 {
-    public class MySQLStore : IDataStore, IMQTTCom, IUserStore
+    public class MySQLStore : IDataStore, IMQTTCom, IUserStore, ITopicStore
     {
         private readonly string ConnectionString;
         private Dictionary<string, DateTime> LastEntryByOrigin;
@@ -343,6 +344,89 @@ namespace EGG_Haunolding_Management_System.Class
             {
                 Console.WriteLine(ex.ToString());
             }
+        }
+
+        public List<TopicItem> GetAllTopics()
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            try
+            {
+                return connection.Query<TopicItem>("SELECT * FROM topics").ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public void AddTopic(TopicItem topicItem)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Topic = topicItem.Topic
+            };
+
+            try
+            {
+                connection.ExecuteScalar("INSERT INTO topics (Topic) VALUES (@Topic)", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public List<int> GetTopicsByUser(string username)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+            };
+
+            try
+            {
+                return connection.Query<int>("SELECT TopicID FROM topic_access WHERE Username = @Username", entry).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public void DeleteTopic(int id)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Id = id,
+            };
+
+            try
+            {
+                connection.ExecuteScalar("DELETE FROM topics WHERE Id = @Id", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public void AddTopicsToUser(string username, List<int> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveTopicsFromUser(string username, List<int> ids)
+        {
+            throw new NotImplementedException();
         }
     }
 }

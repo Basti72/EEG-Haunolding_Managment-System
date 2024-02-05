@@ -1,0 +1,27 @@
+﻿@model NewTopicViewModel
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="login-form-container">
+            <h1 class="text-center">Neues Topic</h1>
+            <form asp-action="AddTopic" class="my-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Topic" class="control-label">Topic</label>
+                    <input asp-for="Topic" class="form-control" />
+                    <span asp-validation-for="Topic" class="text-danger"></span>
+                </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Hinzufügen
+                </button>
+            </div>
+            </form>
+            <div class="text-center mt-3">
+                <a asp-controller="Topic" asp-action="Index" class="btn btn-link">
+                    Zurück zur Topicübersicht
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
