@@ -1,0 +1,44 @@
+﻿@model JSIViewModel
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/monokai.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/javascript/javascript.min.js"></script>
+
+
+
+
+<h1>Java Script Interpreter</h1>
+
+<form asp-action="ExecuteJavaScript" class="my-4">
+    <div class="UserInput">
+        <label asp-for="Code">Enter JavaScript code:</label><br />
+        <textarea asp-for="Code" id="code" name="code" rows="5" cols="40"></textarea>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary btn-lg">Execute</button>
+    </div>
+</form>
+
+
+<div>
+    @if (!string.IsNullOrEmpty(ViewBag.Result))
+    {
+        <h3>Result:</h3>
+        <p>@ViewBag.Result</p>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <h3>Error:</h3>
+        <p>@ViewBag.Error</p>
+    }
+</div>
+
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        mode: "javascript",
+        theme: "monokai"
+    });
+</script>
