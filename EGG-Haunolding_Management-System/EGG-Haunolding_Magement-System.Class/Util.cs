@@ -10,8 +10,9 @@ namespace EGG_Haunolding_Management_System.Class
         {
             return (long)(dateTime.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         }
-        public static DataItem ToDataItem(this JsonDataItem jsonDataItem)
+        public static DataItem ToDataItem(this JsonDataItem jsonDataItem, string Origin)
         {
+            Origin = Origin.Substring(Origin.IndexOf("/")+1);
             DataItem dataItem = new DataItem();
             if (jsonDataItem.zeittext == null)
                 dataItem.Time = DateTime.Now;
@@ -20,7 +21,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             dataItem.Saldo = jsonDataItem.saldo;
             dataItem.SaldoAvg = jsonDataItem.saldoavg;
-            dataItem.Origin = "dummy";
+            dataItem.Origin = Origin;
             return dataItem;
         }
         public static string CreateHash(string password, out string salt)

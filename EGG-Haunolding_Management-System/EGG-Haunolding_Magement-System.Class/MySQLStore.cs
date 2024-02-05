@@ -4,7 +4,7 @@ using System.Data;
 
 namespace EGG_Haunolding_Management_System.Class
 {
-    public class MySQLStore : IDataStore, IMQTTCom, IUserStore
+    public class MySQLStore : IDataStore, IMQTTCom, IUserStore, ITopicStore
     {
         private readonly string ConnectionString;
         private Dictionary<string, DateTime> LastEntryByOrigin;
@@ -343,6 +343,12 @@ namespace EGG_Haunolding_Management_System.Class
             {
                 Console.WriteLine(ex.ToString());
             }
+        }
+        List<Topic> ITopicStore.GetAllTopics()
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            return connection.Query<Topic>("SELECT * FROM topics").ToList();
         }
     }
 }

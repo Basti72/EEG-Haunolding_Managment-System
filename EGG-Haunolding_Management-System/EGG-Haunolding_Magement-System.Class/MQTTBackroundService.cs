@@ -24,7 +24,6 @@ namespace EGG_Haunolding_Management_System.Class
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("test.mosquitto.org").Build();
-
             // Message handling
             _mqttClient.ApplicationMessageReceivedAsync += e =>
             {
@@ -32,7 +31,7 @@ namespace EGG_Haunolding_Management_System.Class
                 {
                     Console.WriteLine("Received application message.");
                     var response = JsonSerializer.Deserialize<JsonDataItem>(Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment.ToArray()));
-                    var dataItem = response.ToDataItem();
+                    var dataItem = response.ToDataItem(e.ApplicationMessage.Topic);
                     _mqttCom.InsertIntoDatabase(dataItem);
                     Console.WriteLine($"Item inserted: Origin={dataItem.Origin} | Time={dataItem.Time} | Saldo={dataItem.Saldo} | SaldoAvg={dataItem.SaldoAvg}");
                 }
@@ -52,7 +51,7 @@ namespace EGG_Haunolding_Management_System.Class
                 .WithTopicFilter(
                     f =>
                     {
-                        f.WithTopic("zaehlerbroadcast/#");
+                            f.WithTopic($"zaehlerbroadcast/#");
                     })
                 .Build();
 
