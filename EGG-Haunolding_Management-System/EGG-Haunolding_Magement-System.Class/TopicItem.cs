@@ -10,5 +10,7 @@
             Id = id;
             Topic = topic;
         }
+
+        public TopicItem() { }
     }
 }

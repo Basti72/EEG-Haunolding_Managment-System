@@ -9,30 +9,67 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Username" class="control-label">Benutzername</label>
-                    <input asp-for="Username" class="form-control" />
+                    <input asp-for="Username" class="form-control" readonly/>
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <select asp-for="Role" asp-items="Model.Roles"></select>
-                <span asp-validation-for="Role" class="text-danger"></span>
-                <div class="text-center mt-3">
-                    <a asp-action="ChangePassword" asp-route-username="@Model.Username" class="btn btn-secondary">
-                        Passwort ändern
-                    </a>
+                    <label asp-for="Role" class="control-label">Rolle</label>
+                    <select asp-for="Role" asp-items="Model.Roles" class="form-control"></select>
+                    <span asp-validation-for="Role" class="text-danger"></span>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label asp-for="AccessAllTopics" class="control-label">Zugriff auf alle Topics</label>
+                    <input asp-for="AccessAllTopics" type="checkbox" onchange="toggleTopicSelection()" />
+                </div>
+                <div class="form-group">
+                    <select asp-for="SelectedTopicIds" asp-items="Model.AvailableTopics" class="form-control" multiple="multiple"></select>
+                    <span asp-validation-for="SelectedTopicIds" class="text-danger"></span>
+                </div>
                 <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary btn-lg">
-                     <i class="bi bi-box-arrow-in-right"></i> Änderungen speichern
-                </button>
-            </div>
+                    <button type="submit" class="btn btn-primary btn-lg">Änderungen speichern</button>
+                </div>
             </form>
             <div class="text-center mt-3">
-                <a asp-controller="User" asp-action="Index" class="btn btn-link">
-                    Zurück zur Benutzerübersicht
-                </a>
+                <a asp-action="ChangePassword" asp-route-username="@Model.Username" class="btn btn-secondary">Passwort ändern</a>
+            </div>
+            <div class="text-center mt-3">
+                <a asp-controller="User" asp-action="Index" class="btn btn-link">Zurück zur Benutzerübersicht</a>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Speicher für die ursprünglichen Optionen
+        var originalOptions = [];
+
+        // Funktion zum Umschalten der Topic-Auswahl
+        function toggleTopicSelection() {
+            var checkbox = document.getElementById('AccessAllTopics');
+            var select = document.getElementById('SelectedTopicIds');
+
+            if (checkbox.checked) {
+                // Speichert die ursprünglichen Optionen und leert das Dropdown, wenn die Checkbox gecheckt ist
+                originalOptions = Array.from(select.options);
+                select.innerHTML = '';
+            } else {
+                // Stellt die ursprünglichen Optionen wieder her, wenn die Checkbox nicht gecheckt ist
+                originalOptions.forEach(function (option) {
+                    select.options.add(option);
+                });
+            }
+
+            select.disabled = checkbox.checked;
+        }
+
+        // Event-Listener für das Laden der Seite
+        document.addEventListener('DOMContentLoaded', function () {
+            var select = document.getElementById('SelectedTopicIds');
+            originalOptions = Array.from(select.options); // Initialisiert die ursprünglichen Optionen
+
+            // Setzt das richtige Verhalten der Topic-Auswahl basierend auf dem Zustand der Checkbox
+            toggleTopicSelection();
+        });
+    </script>
+}

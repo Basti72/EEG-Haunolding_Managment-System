@@ -20,16 +20,21 @@
                 <label asp-for="Role" class="control-label"></label>
                 <select asp-for="Role" asp-items="Model.Roles"></select>
                 <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="AccessAllTopics"></label>
+                    <input asp-for="AccessAllTopics" type="checkbox" onchange="toggleTopicSelection()" checked/>
+                    <select asp-for="SelectedTopicIds" asp-items="Model.AvailableTopics" class="form-control" multiple="multiple" disabled id="topicsSelect"></select>
+                </div>
+                </div>
                 <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary btn-lg">
-                     <i class="bi bi-box-arrow-in-right"></i> Registrieren
-                </button>
-            </div>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Registrieren
+                    </button>
+                </div>
             </form>
             <form asp-action="Import">
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-secondary btn-lg">
+                    <button type="submit" class="btn btn-secondary btn-lg" disabled>
                         <i class="bi bi-upload"></i> Importieren
                     </button>
                 </div>
@@ -42,3 +47,52 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var allTopicsCheckbox = document.getElementById('AccessAllTopics');
+        var topicsSelect = document.getElementById('topicsSelect');
+
+        // Globales Array zum Speichern der ursprünglichen Optionen
+        window.originalOptions = [];
+
+        // Speichert die ursprünglichen Optionen und leert die Liste, wenn die Checkbox gecheckt ist
+        for (var i = 0; i < topicsSelect.options.length; i++) {
+            window.originalOptions.push({
+                value: topicsSelect.options[i].value,
+                text: topicsSelect.options[i].text
+            });
+        }
+
+        // Prüfen, ob die Checkbox beim Laden der Seite gecheckt ist
+        if (allTopicsCheckbox.checked) {
+            topicsSelect.innerHTML = ""; // Löscht vorhandene Optionen, wenn gecheckt
+            topicsSelect.disabled = true; // Deaktiviert das Auswahlfeld
+        } else {
+            topicsSelect.disabled = false; // Dieser Fall tritt ein, wenn die Checkbox nicht gecheckt ist
+        }
+    });
+
+    function toggleTopicSelection() {
+        var allTopicsCheckbox = document.getElementById('AccessAllTopics');
+        var topicsSelect = document.getElementById('topicsSelect');
+
+        if (allTopicsCheckbox.checked) {
+            topicsSelect.innerHTML = ""; // Löscht vorhandene Optionen
+            topicsSelect.disabled = true; // Deaktiviert das Auswahlfeld
+        } else {
+            topicsSelect.disabled = false; // Aktiviert das Auswahlfeld
+            restoreOriginalOptions(); // Stellt die ursprünglichen Optionen wieder her
+        }
+    }
+
+    function restoreOriginalOptions() {
+        var topicsSelect = document.getElementById('topicsSelect');
+        topicsSelect.innerHTML = ""; // Löscht vorhandene Optionen
+        // Fügt jede gespeicherte Option wieder hinzu
+        window.originalOptions.forEach(function (option) {
+            var newOption = new Option(option.text, option.value);
+            topicsSelect.add(newOption);
+        });
+    }
+</script>

@@ -25,7 +25,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHostedService<MQTTBackroundService>();
 builder.Services.AddHostedService<DBBackroundService>();
 
-string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringIntern.txt";
+string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\Resources\\ConnectionStringExtern.txt";
 builder.Services.AddTransient<IDataStore>(ctx => { return new MySQLStore(path); });
 builder.Services.AddTransient<IUserStore>(ctx => { return new MySQLStore(path); });
 builder.Services.AddTransient<IMQTTCom>(ctx => { return new MySQLStore(path); });

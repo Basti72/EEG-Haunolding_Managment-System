@@ -6,7 +6,7 @@
         void AddTopic(TopicItem topicItem);
         List<int> GetTopicsByUser(string username);
         void DeleteTopic(int id);
-        void AddTopicsToUser(string  username, List<int> ids);
-        void RemoveTopicsFromUser(string username, List<int> ids);
+        void AddTopicToUser(string username, int id);
+        void RemoveAllTopicsFromUser(string username);
     }
 }

@@ -419,14 +419,43 @@ namespace EGG_Haunolding_Management_System.Class
             }
         }
 
-        public void AddTopicsToUser(string username, List<int> ids)
+        public void AddTopicToUser(string username, int id)
         {
-            throw new NotImplementedException();
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+                Id = id,
+            };
+
+            try
+            {
+                connection.ExecuteScalar("INSERT INTO topic_access VALUES (@Username, @Id)", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
-        public void RemoveTopicsFromUser(string username, List<int> ids)
+        public void RemoveAllTopicsFromUser(string username)
         {
-            throw new NotImplementedException();
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+            };
+
+            try
+            {
+                connection.ExecuteScalar("DELETE FROM topic_access WHERE Username = @Username", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
