@@ -1,6 +1,7 @@
 ﻿using EGG_Haunolding_Management_System.Class;
 using EGG_Haunolding_Management_System.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace EGG_Haunolding_Management_System.Controllers
@@ -8,23 +9,30 @@ namespace EGG_Haunolding_Management_System.Controllers
     public class RegistrationController : Controller
     {
         private IUserStore UserStore { get; }
+        private ITopicStore TopicStore { get; }
         private IConfiguration Config { get; }
-        public RegistrationController(IUserStore userStore, IConfiguration config)
+        public RegistrationController(IUserStore userStore, IConfiguration config, ITopicStore topicStore)
         {
             UserStore = userStore;
             Config = config;
+            TopicStore = topicStore;
         }
 
         public IActionResult Index()
         {
-            return View(new RegistrationViewModel());
+            return View(LoadModel());
         }
 
         public IActionResult DoRegistration(RegistrationViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(nameof(Index), model);
+                return View(nameof(Index), LoadModel());
+            }
+
+            if (model.AccessAllTopics)
+            {
+                model.SelectedTopicIds = new List<int> { 1 };
             }
 
             string salt;
@@ -36,12 +44,31 @@ namespace EGG_Haunolding_Management_System.Controllers
                 return View(nameof(Index), model);
             }
 
+            foreach (int id in model.SelectedTopicIds)
+                TopicStore.AddTopicToUser(model.Username, id);
+
             return RedirectToAction("Index", "User");
         }
 
         public IActionResult Import()
         {
             return View();
+        }
+
+        private RegistrationViewModel LoadModel()
+        {
+            List<SelectListItem> listItems = new List<SelectListItem>();
+
+            List<TopicItem> topics = TopicStore.GetAllTopics();
+            topics.RemoveAt(0);
+
+            foreach (TopicItem topicItem in topics)
+                listItems.Add(new SelectListItem { Value = topicItem.Id.ToString(), Text = topicItem.Topic });
+
+            return new RegistrationViewModel
+            {
+                AvailableTopics = listItems
+            };
         }
 
         [HttpPost]

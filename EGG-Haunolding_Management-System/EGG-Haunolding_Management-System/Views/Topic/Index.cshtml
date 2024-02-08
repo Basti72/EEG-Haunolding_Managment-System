@@ -1,0 +1,46 @@
+﻿@model TopicViewModel
+
+<table class="styled-table">
+    <tr>
+        <th>Id</th>
+        <th>Topic</th>
+        <th></th>
+    </tr>
+    @foreach (var topic in Model.Topics)
+    {
+        <tr>
+            <td>@topic.Id</td>
+            @if (topic.Id != 1)
+            {
+                <td>zaehlerbroadcast/@topic.Topic</td>
+            }
+            else
+            {
+                <td>@topic.Topic</td>
+            }
+            @if (topic.Id != 1)
+            {
+                <td class="centered-cell">
+                    <a href="javascript:void(0)" onclick="confirmDelete('@topic.Id')" class="btn btn-custom-delete" title="Löschen">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            }
+            else{<td></td>}
+        </tr>
+    }
+</table>
+
+<p>
+    <a href="@Url.Action("NewTopic", "Topic")" class="btn btn-custom-add">
+        <i class="fas fa-plus"></i> Neues Topic anlegen
+    </a>
+</p>
+
+<script>
+    function confirmDelete(id) {
+        if (confirm("Sind Sie sicher, dass Sie dieses Topic löschen möchten?")) {
+            window.location.href = '@Url.Action("Delete", "Topic")' + '?id=' + id;
+        }
+    }
+</script>

@@ -1,6 +1,7 @@
 ﻿using MySqlConnector;
 using Dapper;
 using System.Data;
+using System.Security.Policy;
 
 namespace EGG_Haunolding_Management_System.Class
 {
@@ -8,9 +9,9 @@ namespace EGG_Haunolding_Management_System.Class
     {
         private readonly string ConnectionString;
         private Dictionary<string, DateTime> LastEntryByOrigin;
-        public MySQLStore(string path)
+        public MySQLStore(string connectionString)
         {
-            ConnectionString = File.ReadAllText(path);
+            ConnectionString = connectionString;
             LastEntryByOrigin = new Dictionary<string, DateTime>();
         }
 
@@ -344,11 +345,137 @@ namespace EGG_Haunolding_Management_System.Class
                 Console.WriteLine(ex.ToString());
             }
         }
-        List<Topic> ITopicStore.GetAllTopics()
+
+        public List<TopicItem> GetAllTopics()
         {
             using MySqlConnection connection = new(ConnectionString);
 
-            return connection.Query<Topic>("SELECT * FROM topics").ToList();
+            try
+            {
+                return connection.Query<TopicItem>("SELECT * FROM topics").ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public void AddTopic(TopicItem topicItem)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Topic = topicItem.Topic
+            };
+
+            try
+            {
+                connection.ExecuteScalar("INSERT INTO topics (Topic) VALUES (@Topic)", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public List<int> GetTopicsByUser(string username)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+            };
+
+            try
+            {
+                return connection.Query<int>("SELECT TopicID FROM topic_access WHERE Username = @Username", entry).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public void DeleteTopic(int id)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Id = id,
+            };
+
+            try
+            {
+                connection.ExecuteScalar("DELETE FROM topics WHERE Id = @Id", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public void AddTopicToUser(string username, int id)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+                Id = id,
+            };
+
+            try
+            {
+                connection.ExecuteScalar("INSERT INTO topic_access VALUES (@Username, @Id)", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public void RemoveAllTopicsFromUser(string username)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Username = username,
+            };
+
+            try
+            {
+                connection.ExecuteScalar("DELETE FROM topic_access WHERE Username = @Username", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public TopicItem GetTopicItemById(int id)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Id = id,
+            };
+
+            try
+            {
+                return connection.QueryFirstOrDefault<TopicItem>("SELECT * FROM topics WHERE Id = @Id", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
     }
 }

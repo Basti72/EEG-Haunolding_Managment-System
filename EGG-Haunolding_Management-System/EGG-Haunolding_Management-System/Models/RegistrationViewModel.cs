@@ -23,5 +23,12 @@ namespace EGG_Haunolding_Management_System.Models
             new SelectListItem { Value = "User", Text= "User"},
             new SelectListItem { Value = "Admin", Text= "Admin"},
         };
+
+        public List<int> SelectedTopicIds { get; set; } = new List<int>();
+
+        public List<SelectListItem> AvailableTopics { get; set; } = new List<SelectListItem>();
+
+        [Display(Name = "Zugriff auf alle Topics")]
+        public bool AccessAllTopics { get; set; }
     }
 }
