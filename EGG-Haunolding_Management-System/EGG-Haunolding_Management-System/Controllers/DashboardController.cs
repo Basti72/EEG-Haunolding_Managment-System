@@ -2,28 +2,41 @@
 using EGG_Haunolding_Management_System.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace EGG_Haunolding_Management_System.Controllers
 {
     public class DashboardController : Controller
     {
         private readonly IDataStore m_DataStore;
-        public DashboardController(IDataStore dataStore, IUserStore userStore)
+        private readonly ITopicStore m_TopicStore;
+        private List<string> m_Origins;
+        public DashboardController(IDataStore dataStore, ITopicStore topicStore)
         {
             m_DataStore = dataStore;
+            m_TopicStore = topicStore;
         }
 
         public ActionResult Index(string name)
         {
-            var origins = m_DataStore.GetOrigins();
-            if (origins == null)
+            List<TopicItem> topicItems = m_TopicStore.GetTopicItemsByUser(User.Identity.Name);
+            if (topicItems.Count == 1 && topicItems[0].Id == 1)
+            {
+                topicItems = m_TopicStore.GetAllTopics();
+                topicItems.RemoveAt(0);
+            }
+            foreach(TopicItem topicItem in topicItems)
+            {
+                m_Origins.Add(topicItem.Topic);
+            }
+            if (m_Origins == null)
                 return View("NoDataFound");
-            if (name == null)
-                name = origins[0];
+            if (name == null || !m_Origins.Contains(name))
+                name = m_Origins[0];
             DashboardViewModel model = GetData(name);
             if (model == null)
                 return View("NoDataFound");
-            model.Origins = origins.ToList();
+            model.Origins = m_Origins;
             return View(model);
         }
 
@@ -56,7 +69,7 @@ namespace EGG_Haunolding_Management_System.Controllers
             var data = GetData(origin);
             if (data == null) 
                 return View("NoDataFound");
-            data.Origins = m_DataStore.GetOrigins().ToList();
+            data.Origins = m_Origins;
             return Json(data);
         }
 
@@ -65,7 +78,7 @@ namespace EGG_Haunolding_Management_System.Controllers
             var data = GetData(origin);
             if (data == null)
                 return null;
-            data.Origins = m_DataStore.GetOrigins().ToList();
+            data.Origins = m_Origins;
             return Json(data);
         }
     }
