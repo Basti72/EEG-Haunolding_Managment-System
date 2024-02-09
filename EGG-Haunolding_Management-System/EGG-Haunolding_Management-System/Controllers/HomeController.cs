@@ -8,20 +8,31 @@ namespace EGG_Haunolding_Management_System.Controllers
     public class HomeController : Controller
     {
         private readonly IDataStore _dataStore;
-        public HomeController(IDataStore dataStore)
+        private readonly ITopicStore _topicStore;
+        public HomeController(IDataStore dataStore, ITopicStore topicStore)
         {
             _dataStore = dataStore;
+            _topicStore = topicStore;
         }
 
         public IActionResult Index()
         {
             List<Household> households = new List<Household>();
-            string[] origins = _dataStore.GetOrigins();
-            foreach(string origin in origins)
+            List<TopicItem> topicItems = _topicStore.GetTopicItemsByUser(User.Identity.Name);
+            if(topicItems.Count == 1 && topicItems[0].Id == 1)
             {
-                List<DataItem> item = _dataStore.GetAllLastDataByOrigin(origin, 1, 0);
-                int value = item[0].Saldo;
-                households.Add(new Household(origin, value));
+                topicItems = _topicStore.GetAllTopics();
+                topicItems.RemoveAt(0);
+            }
+                
+            foreach (TopicItem topicItem in topicItems)
+            {
+                List<DataItem> item = _dataStore.GetAllLastDataByOrigin(topicItem.Topic, 1, 0);
+                int value = 0;
+                if(item.Count != 0)
+                    value = item[0].Saldo;
+
+                households.Add(new Household(topicItem.Topic, value));
             }
 
             var viewModel = new HomeViewModel
@@ -37,13 +48,21 @@ namespace EGG_Haunolding_Management_System.Controllers
         [HttpGet]
         public async Task<IActionResult> GetHouseholdData()
         {
-            var households = new List<Household>();
-            string[] origins = _dataStore.GetOrigins();
-            foreach (string origin in origins)
+            List<Household> households = new List<Household>();
+            List<TopicItem> topicItems = _topicStore.GetTopicItemsByUser(User.Identity.Name);
+            if (topicItems.Count == 1 && topicItems[0].Id == 1)
             {
-                List<DataItem> item = _dataStore.GetAllLastDataByOrigin(origin, 1, 0);
-                int value = item[0].Saldo;
-                households.Add(new Household(origin, value));
+                topicItems = _topicStore.GetAllTopics();
+                topicItems.RemoveAt(0);
+            }
+
+            foreach (TopicItem topicItem in topicItems)
+            {
+                List<DataItem> item = _dataStore.GetAllLastDataByOrigin(topicItem.Topic, 1, 0);
+                int value = 0;
+                if (item.Count != 0)
+                    value = item[0].Saldo;
+                households.Add(new Household(topicItem.Topic, value));
             }
 
             var totalValue = households.Sum(h => h.Value);

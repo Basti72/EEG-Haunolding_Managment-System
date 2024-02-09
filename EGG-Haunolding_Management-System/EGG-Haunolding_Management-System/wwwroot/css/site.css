@@ -31,29 +31,36 @@ body {
 .household-tiles-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: flex-start; /* Startet die Positionierung am Anfang des Containers */
+    gap: 10px; /* Ersetzt die margin für die Lücke zwischen den Kacheln */
 }
 
 .household-tile {
     border: 1px solid #ccc;
     padding: 20px;
-    margin: 10px;
     cursor: pointer;
-    flex-basis: calc(33% - 20px);
-    text-align: center;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    flex: 0 1 calc(33.333% - 20px); /* Ermöglicht drei Kacheln pro Zeile mit einem Abstand von 10px */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    text-align: center;
+    background-color: #fff; /* Hintergrundfarbe für die Kachel */
+}
+
+/* Fügt etwas Raum am Ende jeder Zeile hinzu, um die Zentrierung der Kacheln in der letzten Zeile zu ermöglichen, wenn es weniger als drei sind */
+.household-tiles-container::after {
+    content: "";
+    flex: auto;
+}
+
+@media (max-width: 600px) {
+    .household-tile {
+        flex: 0 1 100%; /* Auf kleineren Bildschirmen nimmt jede Kachel die volle Breite ein */
+    }
 }
 
 .household-tile:hover {
     transform: scale(1.05);
     background-color: #f0f0f0;
-}
-
-@media (max-width: 600px) {
-    .household-tile {
-        flex-basis: calc(50% - 20px);
-    }
 }
 
 .total-value-display {

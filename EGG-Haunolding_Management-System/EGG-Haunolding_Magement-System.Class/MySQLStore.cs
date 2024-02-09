@@ -502,5 +502,14 @@ namespace EGG_Haunolding_Management_System.Class
 
             return true;
         }
+
+        public List<TopicItem> GetTopicItemsByUser(string username)
+        {
+            List<int> ids = GetTopicsByUser(username);
+            List<TopicItem> items = new List<TopicItem>();
+            foreach (int id in ids)
+                items.Add(GetTopicItemById(id));
+            return items;
+        }
     }
 }
