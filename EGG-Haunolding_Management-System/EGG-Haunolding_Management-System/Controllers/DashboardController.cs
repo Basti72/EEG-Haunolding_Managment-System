@@ -10,7 +10,7 @@ namespace EGG_Haunolding_Management_System.Controllers
     {
         private readonly IDataStore m_DataStore;
         private readonly ITopicStore m_TopicStore;
-        private List<string> m_Origins;
+        private List<string> m_Origins = new List<string>();
         public DashboardController(IDataStore dataStore, ITopicStore topicStore)
         {
             m_DataStore = dataStore;
