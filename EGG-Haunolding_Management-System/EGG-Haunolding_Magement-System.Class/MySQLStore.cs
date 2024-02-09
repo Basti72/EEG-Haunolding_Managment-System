@@ -477,5 +477,30 @@ namespace EGG_Haunolding_Management_System.Class
                 return null;
             }
         }
+
+        public bool CheckIfTopicExists(string topic)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Topic = topic,
+            };
+
+            TopicItem item = new TopicItem();
+            try
+            {
+                item =  connection.QueryFirstOrDefault<TopicItem>("SELECT * FROM topics WHERE Topic = @Topic", entry);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            if (item == null)
+                return false;
+
+            return true;
+        }
     }
 }

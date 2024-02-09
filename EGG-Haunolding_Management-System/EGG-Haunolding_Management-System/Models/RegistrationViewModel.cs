@@ -7,11 +7,11 @@ namespace EGG_Haunolding_Management_System.Models
     public class RegistrationViewModel
     {
         [Display(Name = "Benutzername")]
-        [Required(ErrorMessage = "Username is required!")]
+        [Required(ErrorMessage = "Gib einen Benutzernamen ein!")]
         public string Username { get; set; }
 
         [Display(Name = "Passwort")]
-        [Required(ErrorMessage = "Password is required!")]
+        [Required(ErrorMessage = "Gib ein Passwort ein!")]
         public string Password { get; set; }
 
         [BindProperty]

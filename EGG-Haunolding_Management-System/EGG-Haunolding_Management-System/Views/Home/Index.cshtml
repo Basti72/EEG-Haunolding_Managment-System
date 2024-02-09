@@ -1,7 +1,10 @@
 ﻿@model HomeViewModel
 
+<div class="text-center mb-4">
+    <img src="~/images/Logo.png" alt="Logo" style="max-width: 200px;">
+</div>
 <div class="total-value-display">
-    <h1>Gesamt: @Model.TotalValue</h1>
+    <h1>Gesamt: @Model.TotalValue  Watt</h1>
 </div>
 
 <div class="household-tiles-container">
@@ -9,7 +12,7 @@
     {
         <div class="household-tile" onclick="location.href='@Url.Action("Index", "Dashboard", new { name = household.Name })'">
             <h3>@household.Name</h3>
-            <p>Wert: @household.Value</p>
+            <p>@household.Value Watt</p>
         </div>
     }
 </div>
@@ -26,7 +29,7 @@
                     // Überprüfen Sie, ob die Antwort nicht null ist
                     if (data && data.households) {
                         // Aktualisieren Sie den Gesamtwert
-                        $('.total-value-display h1').text('Gesamt: ' + data.totalValue);
+                        $('.total-value-display h1').text('Gesamt: ' + data.totalValue + ' Watt');
 
                         // Entfernen Sie alle alten Kacheln
                         $('.household-tiles-container').empty();
@@ -37,7 +40,7 @@
                             $('.household-tiles-container').append(
                                 '<div class="household-tile" onclick="location.href=\'' + url + '\'">' +
                                 '<h3>' + household.name + '</h3>' +
-                                '<p>Wert: ' + household.value + '</p>' +
+                                '<p>' + household.value + ' Watt</p>' +
                                 '</div>'
                             );
                         });

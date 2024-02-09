@@ -35,11 +35,24 @@ namespace EGG_Haunolding_Management_System.Controllers
         public IActionResult AddTopic(NewTopicViewModel model)
         {
             if(!ModelState.IsValid)
+                return View("NewTopic", model);
+
+            string prefix = "zaehlerbroadcast/";
+            string topic = model.Topic.Substring(prefix.Length);
+
+            if(String.IsNullOrEmpty(topic))
             {
+                ModelState.AddModelError(string.Empty, "Gib ein Topic ein!");
                 return View("NewTopic", model);
             }
-            string prefix = "zaehlerbroadcast/";
-            TopicStore.AddTopic(new TopicItem(0, model.Topic.Substring(prefix.Length)));
+
+            if(TopicStore.CheckIfTopicExists(topic))
+            {
+                ModelState.AddModelError(string.Empty, "Dieses Topic existiert bereits!");
+                return View("NewTopic", model);
+            }
+            
+            TopicStore.AddTopic(new TopicItem(0, topic));
 
             return RedirectToAction("Index");
         }

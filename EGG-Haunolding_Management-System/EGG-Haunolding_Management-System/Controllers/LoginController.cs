@@ -30,7 +30,7 @@ namespace EGG_Haunolding_Management_System.Controllers
 
             if (!await UserData.Login(model.Username, model.Password, HttpContext))
             {
-                ModelState.AddModelError("", "Your username or password was not found!");
+                ModelState.AddModelError("", "Der Benutzername oder das Passwort wurde nicht gefunden!");
                 return View(nameof(Index));
             }
 

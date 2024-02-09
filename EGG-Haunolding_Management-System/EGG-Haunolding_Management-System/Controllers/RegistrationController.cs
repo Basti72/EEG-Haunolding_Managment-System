@@ -40,7 +40,7 @@ namespace EGG_Haunolding_Management_System.Controllers
 
             if (!UserStore.AddUser(new UserItem(model.Username, hash, salt, model.Role)))
             {
-                ModelState.AddModelError("", "This username already exits!");
+                ModelState.AddModelError("", "Dieser Benutzername existiert bereits!");
                 return View(nameof(Index), model);
             }
 
@@ -72,43 +72,53 @@ namespace EGG_Haunolding_Management_System.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadFile(IFormFile file)
+        public IActionResult UploadFile(IFormFile file, RegistrationViewModel model)
         {
-            if (file != null && file.Length > 0)
+            try
             {
-                // Überprüfen, ob die Datei eine .txt-Datei ist
-                if (Path.GetExtension(file.FileName).ToLower() == ".txt")
+                if (file != null && file.Length > 0)
                 {
-                    using (var reader = new StreamReader(file.OpenReadStream()))
+                    // Überprüfen, ob die Datei eine .txt-Datei ist
+                    if (Path.GetExtension(file.FileName).ToLower() == ".txt")
                     {
-                        var fileContent = reader.ReadToEnd();
-                        string[] fileLines = fileContent.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-                        foreach(string line in fileLines)
+                        using (var reader = new StreamReader(file.OpenReadStream()))
                         {
-                            string[] splitLine = line.Split(';');
-                            string salt;
-                            string hash = Util.CreateHash(splitLine[1], out salt);
+                            var fileContent = reader.ReadToEnd();
+                            string[] fileLines = fileContent.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
-                            if (!UserStore.AddUser(new UserItem(splitLine[0], hash, salt, splitLine[2])))
+                            foreach (string line in fileLines)
                             {
-                                Console.WriteLine($"Could not insert User {splitLine[0]}");
-                            }
-                        }
+                                string[] splitLine = line.Split(';');
+                                string salt;
+                                string hash = Util.CreateHash(splitLine[1], out salt);
 
-                        return View(nameof(Index), new RegistrationViewModel());
+                                if (!UserStore.AddUser(new UserItem(splitLine[0], hash, salt, splitLine[2])))
+                                {
+                                    Console.WriteLine($"Could not insert User {splitLine[0]}");
+                                }
+                            }
+
+                            return View(nameof(Index), new RegistrationViewModel());
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Wähle eine gültige .txt-Datei aus!");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Bitte wählen Sie eine gültige .txt-Datei aus.");
+                    ModelState.AddModelError(string.Empty, "Wähle eine Datei aus!");
                 }
+                return View("Import", model);
             }
-            else
+            catch(Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Bitte wählen Sie eine Datei aus.");
+                ModelState.AddModelError(string.Empty, "Da ist etwas schiefgegangen!");
+                ModelState.AddModelError(string.Empty, "Überprüfe bitte den Inhalt der .txt Datei!");
+                ModelState.AddModelError(string.Empty, "Beachte, dass trotzdem manche der Bentzer importiert worden sein können!");
+                return View("Import", model);
             }
-            return View("Import");
         }
     }
 }

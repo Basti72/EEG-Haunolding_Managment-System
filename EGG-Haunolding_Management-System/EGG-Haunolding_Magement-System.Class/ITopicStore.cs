@@ -9,5 +9,6 @@
         void DeleteTopic(int id);
         void AddTopicToUser(string username, int id);
         void RemoveAllTopicsFromUser(string username);
+        bool CheckIfTopicExists(string topic);
     }
 }
