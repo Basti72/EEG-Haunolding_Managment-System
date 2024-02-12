@@ -94,13 +94,13 @@ namespace EGG_Haunolding_Management_System.Class
             {
                 Origin = origin,
                 CompressionLevel = compressionLevel,
-                StartDate = startDate.ToString("yyyy-MM-dd"),
-                EndDate = endDate.ToString("yyyy-MM-dd"),
+                StartDate = startDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                EndDate = endDate.ToString("yyyy-MM-dd HH:mm:ss"),
             };
 
             try
             {
-                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND DATE(TIME) >= @StartDate AND DATE(TIME) <= @EndDate AND CompressionLevel = @CompressionLevel", entry).ToList();
+                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND `Time` >= @StartDate AND `Time` <= @EndDate AND CompressionLevel = @CompressionLevel", entry).ToList();
             }
             catch (Exception ex)
             {
