@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHostedService<MQTTBackroundService>();
 //builder.Services.AddHostedService<DBBackroundService>();
 
-string connectionString = builder.Configuration.GetConnectionString("DbHTLVBExtern");
+string connectionString = builder.Configuration.GetConnectionString("Db");
 builder.Services.AddTransient<IDataStore>(ctx => { return new MySQLStore(connectionString); });
 builder.Services.AddTransient<IUserStore>(ctx => { return new MySQLStore(connectionString); });
 builder.Services.AddTransient<IMQTTCom>(ctx => { return new MySQLStore(connectionString); });

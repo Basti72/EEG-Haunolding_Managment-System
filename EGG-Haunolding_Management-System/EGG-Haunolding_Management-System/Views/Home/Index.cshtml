@@ -3,19 +3,29 @@
 <div class="text-center mb-4">
     <img src="~/images/Logo.png" alt="Logo" style="max-width: 200px;">
 </div>
-<div class="total-value-display">
-    <h1>Gesamt: @Model.TotalValue Watt</h1>
-</div>
+@if (Model.Households != null && Model.Households.Any())
+{
+    <div class="total-value-display">
+        <h1>Gesamt: @Model.TotalValue Watt</h1>
+    </div>
 
-<div class="household-tiles-container">
-    @foreach (var household in Model.Households)
-    {
-        <div class="household-tile" onclick="location.href='@Url.Action("Index", "Dashboard", new { name = household.Name })'">
-            <h3>@household.Name</h3>
-            <p>@household.Value Watt</p>
-        </div>
-    }
-</div>
+    <div class="household-tiles-container">
+        @foreach (var household in Model.Households)
+        {
+            <div class="household-tile" onclick="location.href='@Url.Action("Index", "Dashboard", new { name = household.Name })'">
+                <h3>@household.Name</h3>
+                <p>@household.Value Watt</p>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center my-5">
+        <p style="font-size: 24px; font-weight: bold;">Ihnen wurde noch kein Topic zugewiesen!</p>
+        <p style="font-size: 24px; font-weight: bold;">Wenden Sie sich bitte an Ihren Administrator!</p>
+    </div>
+}
 
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

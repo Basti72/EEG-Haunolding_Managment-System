@@ -1,6 +1,7 @@
 ﻿using EGG_Haunolding_Management_System.Class;
 using EGG_Haunolding_Management_System.Models;
 using Microsoft.AspNetCore.Mvc;
+using MySqlConnector;
 using System.Diagnostics;
 
 namespace EGG_Haunolding_Management_System.Controllers
@@ -8,17 +9,37 @@ namespace EGG_Haunolding_Management_System.Controllers
     public class LoginController : Controller
     {
         private AuthenticationLogic UserData { get; set; }
-        public LoginController(AuthenticationLogic userData)
+        private readonly IConfiguration _configuration;
+        public LoginController(AuthenticationLogic userData, IConfiguration config)
         {
             UserData = userData;
+            _configuration = config;
         }
 
         public IActionResult Index()
         {
+            if (!DatabaseConnectionWorking())
+                return View("DatabaseNotWorking");
+
             if (HttpContext.User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
 
             return View(new LoginViewModel());
+        }
+
+        private bool DatabaseConnectionWorking()
+        {
+            using MySqlConnection connection = new(_configuration.GetConnectionString("Db"));
+            try
+            {
+                connection.Open();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
 
         public async Task<IActionResult> DoLogin(LoginViewModel model)
