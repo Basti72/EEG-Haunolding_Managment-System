@@ -36,7 +36,7 @@
         <input type="radio" id="today" name="timeframe" value="2"> <label for="today">Heute</label>
         <input type="radio" id="1day" name="timeframe" value="3"> <label for="1day">Letzte 24 Stunden</label>
         <input type="radio" id="thisWeek" name="timeframe" value="4"> <label for="thisWeek">Diese Woche</label>
-        <input type="radio" id="1month" name="timeframe" value="5"> <label for="1month">Letzter Monat</label>
+        <input type="radio" id="1month" name="timeframe" value="5"> <label for="1month">Letzten 30 Tage</label>
         <input type="radio" id="thisYear" name="timeframe" value="6"> <label for="thisYear">Dieses Jahr</label>
         <input type="radio" id="sinceStart" name="timeframe" value="7"> <label for="sinceStart">Seit Beginn</label>
     </div>
@@ -50,11 +50,12 @@
             $('#originDropdown').change(function () {
                 // Get the selected value from the dropdown
                 var selectedOrigin = $(this).val();
+                var selectedTimeFrame = document.querySelector('input[name="timeframe"]:checked').value;
                 // Call the controller action using AJAX
                 $.ajax({
                     url: '@Url.Action("UpdateChart", "Dashboard")',
                     type: 'GET',
-                    data: { origin: selectedOrigin },
+                    data: { origin: selectedOrigin, timeFrame: selectedTimeFrame },
                     success: function (data) {
                         // Update the chart using the data returned from the controller
                         updateChart(data);
@@ -104,11 +105,11 @@
         // update on Intervall
         function updateChartData() {
             var selectedOrigin = $('#originDropdown').val();
-
+            var selectedTimeFrame = document.querySelector('input[name="timeframe"]:checked').value;
             $.ajax({
                 url: '@Url.Action("GetLatestData", "Dashboard")',
                 type: 'GET',
-                data: { origin: selectedOrigin },
+                data: { origin: selectedOrigin, timeFrame: selectedTimeFrame },
                 success: function (data) {
                     updateChart(data);
                 },

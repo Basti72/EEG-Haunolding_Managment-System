@@ -33,7 +33,7 @@ namespace EGG_Haunolding_Management_System.Controllers
                 return View("NoDataFound");
             if (name == null || !origins.Contains(name))
                 name = origins[0];
-            DashboardViewModel model = GetData(name);
+            DashboardViewModel model = GetDataFromTimeFrame("1", name);
             if (model == null)
                 return View("NoDataFound");
             model.Origins = origins;
@@ -64,9 +64,9 @@ namespace EGG_Haunolding_Management_System.Controllers
             return model;
         }
 
-        public IActionResult UpdateChart(string origin)
+        public IActionResult UpdateChart(string origin, string timeFrame)
         {
-            var data = GetData(origin);
+            var data = GetDataFromTimeFrame(timeFrame, origin);
             if (data == null) 
                 return View("NoDataFound");
             List<TopicItem> topicItems = m_TopicStore.GetTopicItemsByUser(User.Identity.Name);
@@ -84,9 +84,10 @@ namespace EGG_Haunolding_Management_System.Controllers
             return Json(data);
         }
 
-        public IActionResult GetLatestData(string origin)
+        public IActionResult GetLatestData(string origin, string timeFrame)
         {
-            var data = GetData(origin);
+            Console.WriteLine($"timeFrame: {timeFrame}");
+            var data = GetDataFromTimeFrame(timeFrame, origin);
             if (data == null)
                 return null;
             List<TopicItem> topicItems = m_TopicStore.GetTopicItemsByUser(User.Identity.Name);
@@ -106,7 +107,6 @@ namespace EGG_Haunolding_Management_System.Controllers
 
         public IActionResult GetTimeFrameData(string timeframe, string origin)
         {
-            Console.WriteLine($"TimeFrame: {timeframe}");
             List<TopicItem> topicItems = m_TopicStore.GetTopicItemsByUser(User.Identity.Name);
             if (topicItems.Count == 1 && topicItems[0].Id == 1)
             {
@@ -130,13 +130,13 @@ namespace EGG_Haunolding_Management_System.Controllers
             List<DataItem>? data = new List<DataItem>();
             switch(timeframe)
             {
-                case "1": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now.Date.AddHours(DateTime.Now.Hour).AddHours(-1), DateTime.Now); break;
+                case "1": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromHours(1), DateTime.Now); break;
                 case "2": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Today, DateTime.Now); break;
-                case "3": break;
-                case "4": break;
-                case "5": break;
-                case "6": break;
-                case "7": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now, DateTime.MinValue); break;
+                case "3": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromHours(24), DateTime.Now); break;
+                case "4": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek), DateTime.Now); break;
+                case "5": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromDays(30), DateTime.Now); break;
+                case "6": data = m_DataStore.GetDataByTime(origin, 0, new DateTime(DateTime.Today.Year, 1, 1), DateTime.Now); break;
+                case "7": data = m_DataStore.GetDataByTime(origin, 0, DateTime.MinValue, DateTime.Now); break;
             }
             if (data == null)
                 return null;
@@ -148,8 +148,6 @@ namespace EGG_Haunolding_Management_System.Controllers
                 times.Add(data[i].Time.ToString("yyyy-MM-dd HH:mm:ss"));
                 values.Add(data[i].Saldo);
             }
-            times.Reverse();
-            values.Reverse();
             var model = new DashboardViewModel
             {
                 Times = times,
