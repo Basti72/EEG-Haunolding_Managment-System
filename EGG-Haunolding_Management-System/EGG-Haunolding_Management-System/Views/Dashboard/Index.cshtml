@@ -26,6 +26,15 @@
             <select id="originDropdown" asp-for="Origin" asp-items="@new SelectList(Model.Origins)" class="form-select"></select>
         </div>
     </div>
+
+    <div class="timeframeForm">
+        <input type="radio" id="lastHour" name="timeframe" value="1" checked> <label for="lastHour">Letzte Stunde</label>
+        <input type="radio" id="today" name="timeframe" value="2" checked> <label for="today">Heute</label>
+        <input type="radio" id="1day" name="timeframe" value="3" checked> <label for="1day">Letzte 24 Stunden</label>
+        <input type="radio" id="thisWeek" name="timeframe" value="7"> <label for="thisWeek">Diese Woche</label>
+        <input type="radio" id="1month" name="timeframe" value="30"> <label for="1month">1 Month</label>
+    </div>
+
     
     <div id="chartContainer">
         <canvas id="myChart"></canvas>
@@ -50,6 +59,29 @@
                 });
             });
         });
+
+        // check if timeframe changed
+        document.querySelectorAll('input[type=radio][name="timeframe"]').forEach(function (button) {
+            button.addEventListener('change', function () {
+                var selectedTimeframe = this.value; // Get the selected timeframe value
+                var selectedOrigin = document.getElementById('originDropdown').value;
+                updateChartWithTimeFrame(selectedTimeframe, selectedOrigin); // Call a function to update the chart
+            });
+        });
+
+        function updateChartWithTimeFrame(timeframe, origin) {
+            $.ajax({
+                url: '@Url.Action("GetTimeFrameData", "Dashboard")', // Adjust the URL to match your controller action
+                method: 'GET',
+                data: { timeframe: timeframe, origin: origin }, // Pass the selected timeframe as a parameter
+                success: function (data) {
+                    updateChart(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
 
         function updateChart(data)
         {

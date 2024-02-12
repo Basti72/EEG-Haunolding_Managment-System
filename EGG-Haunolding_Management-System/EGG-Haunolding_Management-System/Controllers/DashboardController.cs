@@ -10,7 +10,6 @@ namespace EGG_Haunolding_Management_System.Controllers
     {
         private readonly IDataStore m_DataStore;
         private readonly ITopicStore m_TopicStore;
-        private List<string> m_Origins = new List<string>();
         public DashboardController(IDataStore dataStore, ITopicStore topicStore)
         {
             m_DataStore = dataStore;
@@ -25,18 +24,19 @@ namespace EGG_Haunolding_Management_System.Controllers
                 topicItems = m_TopicStore.GetAllTopics();
                 topicItems.RemoveAt(0);
             }
+            List<string> origins = new List<string>();
             foreach(TopicItem topicItem in topicItems)
             {
-                m_Origins.Add(topicItem.Topic);
+                origins.Add(topicItem.Topic);
             }
-            if (m_Origins == null)
+            if (origins == null)
                 return View("NoDataFound");
-            if (name == null || !m_Origins.Contains(name))
-                name = m_Origins[0];
+            if (name == null || !origins.Contains(name))
+                name = origins[0];
             DashboardViewModel model = GetData(name);
             if (model == null)
                 return View("NoDataFound");
-            model.Origins = m_Origins;
+            model.Origins = origins;
             return View(model);
         }
 
@@ -69,7 +69,18 @@ namespace EGG_Haunolding_Management_System.Controllers
             var data = GetData(origin);
             if (data == null) 
                 return View("NoDataFound");
-            data.Origins = m_Origins;
+            List<TopicItem> topicItems = m_TopicStore.GetTopicItemsByUser(User.Identity.Name);
+            if (topicItems.Count == 1 && topicItems[0].Id == 1)
+            {
+                topicItems = m_TopicStore.GetAllTopics();
+                topicItems.RemoveAt(0);
+            }
+            List<string> origins = new List<string>();
+            foreach (TopicItem topicItem in topicItems)
+            {
+                origins.Add(topicItem.Topic);
+            }
+            data.Origins = origins;
             return Json(data);
         }
 
@@ -78,9 +89,41 @@ namespace EGG_Haunolding_Management_System.Controllers
             var data = GetData(origin);
             if (data == null)
                 return null;
-            data.Origins = m_Origins;
+            List<TopicItem> topicItems = m_TopicStore.GetTopicItemsByUser(User.Identity.Name);
+            if (topicItems.Count == 1 && topicItems[0].Id == 1)
+            {
+                topicItems = m_TopicStore.GetAllTopics();
+                topicItems.RemoveAt(0);
+            }
+            List<string> origins = new List<string>();
+            foreach (TopicItem topicItem in topicItems)
+            {
+                origins.Add(topicItem.Topic);
+            }
+            data.Origins = origins;
             return Json(data);
         }
+
+        public IActionResult GetTimeFrameData(string timeframe, string origin)
+        {
+            List<TopicItem> topicItems = m_TopicStore.GetTopicItemsByUser(User.Identity.Name);
+            if (topicItems.Count == 1 && topicItems[0].Id == 1)
+            {
+                topicItems = m_TopicStore.GetAllTopics();
+                topicItems.RemoveAt(0);
+            }
+            List<string> origins = new List<string>();
+            foreach (TopicItem topicItem in topicItems)
+            {
+                origins.Add(topicItem.Topic);
+            }
+            var data = GetData(origin);
+            if (data == null)
+                return null;
+            data.Origins = origins;
+            return Json(data);
+        }
+
     }
 
 }
