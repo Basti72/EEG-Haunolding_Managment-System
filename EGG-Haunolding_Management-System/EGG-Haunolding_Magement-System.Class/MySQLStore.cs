@@ -86,6 +86,29 @@ namespace EGG_Haunolding_Management_System.Class
             }
         }
 
+        public List<DataItem> GetDataByTime(string origin, int compressionLevel, DateTime startDate, DateTime endDate)
+        {
+            using MySqlConnection connection = new(ConnectionString);
+
+            var entry = new
+            {
+                Origin = origin,
+                CompressionLevel = compressionLevel,
+                StartDate = startDate.ToString("yyyy-MM-dd"),
+                EndDate = endDate.ToString("yyyy-MM-dd"),
+            };
+
+            try
+            {
+                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND DATE(TIME) >= @StartDate AND DATE(TIME) <= @EndDate' AND CompressionLevel = @CompressionLevel", entry).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
         public void DeleteAllDataByOriginByDay(string origin, DateTime time, int compressionLevel)
         {
             using MySqlConnection connection = new(ConnectionString);
