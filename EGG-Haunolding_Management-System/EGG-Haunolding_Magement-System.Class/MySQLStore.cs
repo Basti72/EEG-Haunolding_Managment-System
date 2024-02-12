@@ -100,7 +100,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND DATE(TIME) >= @StartDate AND DATE(TIME) <= @EndDate' AND CompressionLevel = @CompressionLevel", entry).ToList();
+                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND DATE(TIME) >= @StartDate AND DATE(TIME) <= @EndDate AND CompressionLevel = @CompressionLevel", entry).ToList();
             }
             catch (Exception ex)
             {
