@@ -118,7 +118,7 @@ namespace EGG_Haunolding_Management_System.Controllers
             {
                 origins.Add(topicItem.Topic);
             }
-            var data = GetData(origin);
+            var data = GetDataFromTimeFrame(timeframe, origin);
             if (data == null)
                 return null;
             data.Origins = origins;
@@ -130,13 +130,13 @@ namespace EGG_Haunolding_Management_System.Controllers
             List<DataItem>? data = new List<DataItem>();
             switch(timeframe)
             {
-                case "1": break;
-                case "2": break;
+                case "1": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now.Date.AddHours(DateTime.Now.Hour).AddHours(-1), DateTime.Now); break;
+                case "2": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Today, DateTime.Now); break;
                 case "3": break;
                 case "4": break;
                 case "5": break;
                 case "6": break;
-                case "7": break;
+                case "7": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now, DateTime.MinValue); break;
             }
             if (data == null)
                 return null;

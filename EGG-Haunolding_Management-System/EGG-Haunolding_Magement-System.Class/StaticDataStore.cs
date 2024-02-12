@@ -96,5 +96,10 @@ namespace EGG_Haunolding_Management_System.Class
                 .Take(amount)
                 .ToList();
         }
+
+        public List<DataItem> GetDataByTime(string origin, int compressionLevel, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
