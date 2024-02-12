@@ -33,35 +33,11 @@ namespace EGG_Haunolding_Management_System.Controllers
                 return View("NoDataFound");
             if (name == null || !origins.Contains(name))
                 name = origins[0];
-            DashboardViewModel model = GetDataFromTimeFrame("1", name);
+            DashboardViewModel model = GetDataFromTimeFrame("2", name);
             if (model == null)
                 return View("NoDataFound");
             model.Origins = origins;
             return View(model);
-        }
-
-        private DashboardViewModel GetData(string origin)
-        {
-            var dataList = m_DataStore.GetAllLastDataByOrigin(origin, 100, 0);
-            if(dataList == null)
-                return null;
-            // Assign data from DB to local variables
-            var times = new List<string>();
-            var values = new List<int>();
-            for (int i = 0; i < dataList.Count; i++)
-            {
-                times.Add(dataList[i].Time.ToString("yyyy-MM-dd HH:mm:ss"));
-                values.Add(dataList[i].Saldo);
-            }
-            times.Reverse();
-            values.Reverse();
-            var model = new DashboardViewModel
-            {
-                Times = times,
-                Values = values,
-                Origin = origin
-            };
-            return model;
         }
 
         public IActionResult UpdateChart(string origin, string timeFrame)
