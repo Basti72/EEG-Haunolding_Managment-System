@@ -1,0 +1,10 @@
+﻿
+<div class="container text-center" style="padding-top: 50px;">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Datenbankverbindung fehlgeschlagen</h4>
+        <p>Es konnte keine Verbindung zur Datenbank hergestellt werden. Bitte versuchen Sie es erneut.</p>
+    </div>
+    <form action="@Url.Action("Index", "Login")" method="get">
+        <button type="submit" class="btn btn-primary">Erneut versuchen</button>
+    </form>
+</div>
