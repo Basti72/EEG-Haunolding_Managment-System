@@ -3,6 +3,7 @@ using EGG_Haunolding_Management_System.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
+using System.Globalization;
 
 namespace EGG_Haunolding_Management_System.Controllers
 {
@@ -104,26 +105,183 @@ namespace EGG_Haunolding_Management_System.Controllers
         private DashboardViewModel GetDataFromTimeFrame(string timeframe, string origin)
         {
             List<DataItem>? data = new List<DataItem>();
-            switch(timeframe)
-            {
-                case "1": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromHours(1), DateTime.Now); break;
-                case "2": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Today, DateTime.Now); break;
-                case "3": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromHours(24), DateTime.Now); break;
-                case "4": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek), DateTime.Now); break;
-                case "5": data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromDays(30), DateTime.Now); break;
-                case "6": data = m_DataStore.GetDataByTime(origin, 0, new DateTime(DateTime.Today.Year, 1, 1), DateTime.Now); break;
-                case "7": data = m_DataStore.GetDataByTime(origin, 0, DateTime.MinValue, DateTime.Now); break;
-            }
-            if (data == null)
-                return null;
-            // Assign data from DB to local variables
             var times = new List<string>();
             var values = new List<int>();
-            for (int i = 0; i < data.Count; i++)
+            switch (timeframe)
             {
-                times.Add(data[i].Time.ToString("yyyy-MM-dd HH:mm:ss"));
-                values.Add(data[i].Saldo);
+                case "1":
+                    {
+                        data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromHours(1), DateTime.Now); 
+                        if (data == null)
+                            return null;
+                        for (int i = 0; i < data.Count; i++)
+                        {
+                            times.Add(data[i].Time.ToString("dd-MM-yyyy HH:mm:ss"));
+                            values.Add(data[i].Saldo);
+                        }
+                        break;
+                    }
+                case "2":
+                    {
+                        data = m_DataStore.GetDataByTime(origin, 0, DateTime.Today, DateTime.Now); 
+                        if (data == null)
+                            return null;
+                        for (int i = 0; i < data.Count; i++)
+                        {
+                            times.Add(data[i].Time.ToString("dd-MM-yyyy HH:mm:ss"));
+                            values.Add(data[i].Saldo);
+                        }
+                        break;
+                    }
+                case "3":
+                    {
+                        data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromHours(24), DateTime.Now);
+                        if (data == null)
+                            return null;
+                        for(int i = 0; i < 24; i++)
+                        {
+                            var currentDay = (DateTime.Now - TimeSpan.FromHours(23 - i)).Day;
+                            var currentHour = (DateTime.Now - TimeSpan.FromHours(23-i)).Hour;
+                            times.Add(currentHour.ToString() + ":00");
+
+                            List<int> vals = new List<int>();
+                            for(int j = 0; j < data.Count; j++)
+                            {
+                                if (data[j].Time.Hour == currentHour && data[j].Time.Day == currentDay)
+                                    vals.Add(data[j].Saldo);
+                            }
+                            if (vals.Count < 1)
+                                values.Add(0);
+                            else
+                            {
+                                int x = vals.Sum();
+                                values.Add(x / vals.Count);
+                            }
+                        }
+                        break;
+                    }
+                case "4":
+                    {
+                        data = m_DataStore.GetDataByTime(origin, 0, DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek), DateTime.Now);
+                        if (data == null)
+                            return null;
+
+                        int daysIntoWeek = (int)DateTime.Today.DayOfWeek;
+                        for (int i = 0; i < daysIntoWeek; i++)
+                        {
+                            var currentWeekDay = ((DayOfWeek)i + 1);
+                            CultureInfo germanCulture = new CultureInfo("de-DE");
+                            times.Add(germanCulture.DateTimeFormat.GetDayName(currentWeekDay));
+
+                            List<int> vals = new List<int>();
+                            for(int j = 0; j < data.Count; j++)
+                            {
+                                if (data[j].Time.Date == DateTime.Today.AddDays(-(daysIntoWeek - i)+1))
+                                    vals.Add(data[j].Saldo);
+                            }
+                            if (vals.Count < 1)
+                                values.Add(0);
+                            else
+                            {
+                                int x = vals.Sum();
+                                values.Add(x / vals.Count);
+                            }
+                        }
+                        break;
+                    }
+                case "5":
+                    {
+                        data = m_DataStore.GetDataByTime(origin, 0, DateTime.Now - TimeSpan.FromDays(30), DateTime.Now);
+                        if (data == null)
+                            return null;
+                        for (int i = 0; i < 30; i++)
+                        {
+                            var currentDay = DateTime.Today.AddDays(-(30 - i)+1);
+                            CultureInfo germanCulture = new CultureInfo("de-DE");
+                            times.Add(currentDay.Date.ToString("d", germanCulture));
+
+                            List<int> vals = new List<int>();
+                            for (int j = 0; j < data.Count; j++)
+                            {
+                                if (data[j].Time.Date == currentDay.Date)
+                                    vals.Add(data[j].Saldo);
+                            }
+                            if (vals.Count < 1)
+                                values.Add(0);
+                            else
+                            {
+                                int x = vals.Sum();
+                                values.Add(x / vals.Count);
+                            }
+                        }
+                        break;
+                    }
+                case "6":
+                    {
+                        data = m_DataStore.GetDataByTime(origin, 0, new DateTime(DateTime.Today.Year, 1, 1), DateTime.Now);
+                        if (data == null)
+                            return null;
+
+                        DateTime firstDayOfYear = new DateTime(DateTime.Now.Year, 1, 1);
+                        int daysIntoYear = (DateTime.Today - firstDayOfYear).Days + 1;
+                        for (int i = 0; i < daysIntoYear; i++)
+                        {
+                            var currentDay = DateTime.Today.AddDays(-(daysIntoYear - i) + 1);
+                            CultureInfo germanCulture = new CultureInfo("de-DE");
+                            times.Add(currentDay.Date.ToString("d", germanCulture));
+
+                            List<int> vals = new List<int>();
+                            for (int j = 0; j < data.Count; j++)
+                            {
+                                if (data[j].Time.Date == currentDay.Date)
+                                    vals.Add(data[j].Saldo);
+                            }
+                            if (vals.Count < 1)
+                                values.Add(0);
+                            else
+                            {
+                                int x = vals.Sum();
+                                values.Add(x / vals.Count);
+                            }
+                        }
+                        break;
+                    }
+                case "7":
+                    {
+                        data = m_DataStore.GetDataByTime(origin, 0, DateTime.MinValue, DateTime.Now);
+                        if (data == null)
+                            return null;
+
+                        var startDate = data[0].Time.Date;
+                        startDate = new DateTime(startDate.Year, startDate.Month, 1);
+                        for (; startDate < DateTime.Today;)
+                        {
+                            times.Add(startDate.Month.ToString() + "/" + startDate.Year.ToString());
+
+                            List<int> vals = new List<int>();
+                            for(int j = 0; j < data.Count; j++)
+                            {
+                                if (data[j].Time.Year == startDate.Year && data[j].Time.Month == startDate.Month)
+                                    vals.Add(data[j].Saldo);
+                            }
+
+                            if (vals.Count < 1)
+                                values.Add(0);
+                            else
+                            {
+                                int x = vals.Sum();
+                                values.Add(x / vals.Count);
+                            }
+
+                            if (startDate.Month == 12)
+                                startDate = new DateTime(startDate.Year + 1, 1, 1);
+                            else
+                                startDate = new DateTime(startDate.Year, startDate.Month + 1, 1);
+                        }
+                        break;
+                    }
             }
+
             var model = new DashboardViewModel
             {
                 Times = times,
