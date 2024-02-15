@@ -176,7 +176,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                connection.Execute("INSERT INTO Data(Origin, Time, Saldo, SaldoAvg) VALUES (@Origin, @Time, @Saldo, @SaldoAvg)", entry);
+                connection.Execute("INSERT INTO data(Origin, Time, Saldo, SaldoAvg) VALUES (@Origin, @Time, @Saldo, @SaldoAvg)", entry);
             }
             catch(Exception ex)
             {
