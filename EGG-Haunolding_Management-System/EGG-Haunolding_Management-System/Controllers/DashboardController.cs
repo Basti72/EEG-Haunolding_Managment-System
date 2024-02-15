@@ -11,10 +11,12 @@ namespace EGG_Haunolding_Management_System.Controllers
     {
         private readonly IDataStore m_DataStore;
         private readonly ITopicStore m_TopicStore;
-        public DashboardController(IDataStore dataStore, ITopicStore topicStore)
+        private readonly IConfiguration m_Config;
+        public DashboardController(IDataStore dataStore, ITopicStore topicStore, IConfiguration config)
         {
             m_DataStore = dataStore;
             m_TopicStore = topicStore;
+            m_Config = config;
         }
 
         public ActionResult Index(string name)
@@ -38,6 +40,10 @@ namespace EGG_Haunolding_Management_System.Controllers
             if (model == null)
                 return View("NoDataFound");
             model.Origins = origins;
+
+            int refreshRate = m_Config.GetValue<int>("RefreshRate");
+            ViewBag.RefreshRate = refreshRate;
+
             return View(model);
         }
 

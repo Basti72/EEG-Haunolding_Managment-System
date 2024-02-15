@@ -9,10 +9,12 @@ namespace EGG_Haunolding_Management_System.Controllers
     {
         private readonly IDataStore _dataStore;
         private readonly ITopicStore _topicStore;
-        public HomeController(IDataStore dataStore, ITopicStore topicStore)
+        private readonly IConfiguration _config;
+        public HomeController(IDataStore dataStore, ITopicStore topicStore, IConfiguration config)
         {
             _dataStore = dataStore;
             _topicStore = topicStore;
+            _config = config;
         }
 
         public IActionResult Index()
@@ -41,6 +43,9 @@ namespace EGG_Haunolding_Management_System.Controllers
             };
 
             viewModel.TotalValue = viewModel.Households.Sum(h => h.Value);
+
+            int refreshRate = _config.GetValue<int>("RefreshRate");
+            ViewBag.RefreshRate = refreshRate;
 
             return View(viewModel);
         }

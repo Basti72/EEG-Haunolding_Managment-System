@@ -30,6 +30,7 @@ else
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        var refreshRate = @ViewBag.RefreshRate;
         function updateHouseholdData() {
             $.ajax({
                 url: '@Url.Action("GetHouseholdData", "Home")', // Stellen Sie sicher, dass die URL korrekt ist
@@ -69,7 +70,7 @@ else
             updateHouseholdData();
 
             // Richten Sie das periodische Update ein
-            setInterval(updateHouseholdData, 5000);
+            setInterval(updateHouseholdData, refreshRate);
         });
     </script>
 }

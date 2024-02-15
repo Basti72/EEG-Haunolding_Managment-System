@@ -66,6 +66,7 @@
         <canvas id="myChart"></canvas>
     </div>
     <script>
+        var refreshRate = @ViewBag.RefreshRate;
         $(document).ready(function () {
             $('#originDropdown').change(function () {
                 // Get the selected value from the dropdown
@@ -141,7 +142,7 @@
         // Initial call to fetch and update data
         updateChartData();
         // Set interval to periodically fetch and update data (every 10 seconds in this example)
-        setInterval(updateChartData, 10000);
+        setInterval(updateChartData, refreshRate);
 
         // The actual Chart code
         var ctx = document.getElementById('myChart').getContext('2d');

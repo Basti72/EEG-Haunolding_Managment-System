@@ -8,16 +8,19 @@ namespace EGG_Haunolding_Management_System.Controllers
     public class TopicController : Controller
     {
         private ITopicStore TopicStore { get; }
-        public TopicController(ITopicStore topicStore)
+        private IConfiguration Config { get; }
+        public TopicController(ITopicStore topicStore, IConfiguration config)
         {
             TopicStore = topicStore;
+            Config = config;
         }
 
         public IActionResult Index()
         {
             List<TopicItem> topics = TopicStore.GetAllTopics();
+            string topic = Config.GetValue<string>("TopicName");
 
-            return View(new TopicViewModel { Topics = topics });
+            return View(new TopicViewModel { Topics = topics, TopicName = topic });
         }
 
         public IActionResult Delete(int id)
@@ -29,7 +32,8 @@ namespace EGG_Haunolding_Management_System.Controllers
 
         public IActionResult NewTopic()
         {
-            return View("NewTopic", new NewTopicViewModel { Topic = "zaehlerbroadcast/"});
+            string topic = Config.GetValue<string>("TopicName");
+            return View("NewTopic", new NewTopicViewModel { Topic = topic });
         }
 
         public IActionResult AddTopic(NewTopicViewModel model)
@@ -37,7 +41,14 @@ namespace EGG_Haunolding_Management_System.Controllers
             if(!ModelState.IsValid)
                 return View("NewTopic", model);
 
-            string prefix = "zaehlerbroadcast/";
+            string prefix = Config.GetValue<string>("TopicName");
+
+            if(model.Topic.Length < prefix.Length || prefix != model.Topic.Substring(0, prefix.Length))
+            {
+                ModelState.AddModelError(string.Empty, $"Das Topic muss mit '{prefix}' beginnen.");
+                return View("NewTopic", model);
+            }
+
             string topic = model.Topic.Substring(prefix.Length);
 
             if(String.IsNullOrEmpty(topic))

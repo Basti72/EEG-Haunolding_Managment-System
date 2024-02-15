@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Server;
@@ -13,17 +14,21 @@ namespace EGG_Haunolding_Management_System.Class
         private readonly IMqttClient _mqttClient;
         private readonly MqttFactory _mqttFactory;
         private readonly IMQTTCom _mqttCom;
+        private readonly string tcpServer;
+        private readonly string topicName;
 
-        public MQTTBackroundService(IMQTTCom mqttCom)
+        public MQTTBackroundService(IMQTTCom mqttCom, IConfiguration config)
         {
             _mqttFactory = new MqttFactory();
             _mqttClient = _mqttFactory.CreateMqttClient();
             _mqttCom = mqttCom;
+            tcpServer = config.GetValue<string>("TcpServer");
+            topicName = config.GetValue<string>("TopicName");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("test.mosquitto.org").Build();
+            var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(tcpServer).Build();
             // Message handling
             _mqttClient.ApplicationMessageReceivedAsync += e =>
             {
@@ -51,7 +56,7 @@ namespace EGG_Haunolding_Management_System.Class
                 .WithTopicFilter(
                     f =>
                     {
-                            f.WithTopic($"zaehlerbroadcast/#");
+                            f.WithTopic(topicName + "#");
                     })
                 .Build();
 
