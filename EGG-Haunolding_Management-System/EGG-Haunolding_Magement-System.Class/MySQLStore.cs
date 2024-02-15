@@ -21,7 +21,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                return connection.Query<DataItem>("SELECT * FROM Data").ToList();
+                return connection.Query<DataItem>("SELECT * FROM data").ToList();
             }
             catch (Exception ex) 
             { 
@@ -38,7 +38,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin", entry).ToList();
+                return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin", entry).ToList();
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                return connection.QueryFirstOrDefault<DataItem>("SELECT * FROM Data WHERE Origin = @Origin ORDER BY TIME DESC", entry);
+                return connection.QueryFirstOrDefault<DataItem>("SELECT * FROM data WHERE Origin = @Origin ORDER BY TIME DESC", entry);
             }
             catch (Exception ex)
             {
@@ -77,7 +77,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry).ToList();
+                return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry).ToList();
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                return connection.Query<DataItem>("SELECT * FROM Data WHERE Origin = @Origin AND `Time` >= @StartDate AND `Time` <= @EndDate AND CompressionLevel = @CompressionLevel", entry).ToList();
+                return connection.Query<DataItem>("SELECT * FROM data WHERE Origin = @Origin AND `Time` >= @StartDate AND `Time` <= @EndDate AND CompressionLevel = @CompressionLevel", entry).ToList();
             }
             catch (Exception ex)
             {
@@ -122,7 +122,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                connection.Execute("DELETE FROM Data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry);
+                connection.Execute("DELETE FROM data WHERE Origin = @Origin AND DATE(time) = @Time AND CompressionLevel = @CompressionLevel", entry);
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                return connection.Query<string>("SELECT DISTINCT Origin FROM Data").ToArray();
+                return connection.Query<string>("SELECT DISTINCT Origin FROM data").ToArray();
             }
             catch (Exception ex)
             {
@@ -176,7 +176,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                connection.Execute("INSERT INTO Data(Origin, Time, Saldo, SaldoAvg) VALUES (@Origin, @Time, @Saldo, @SaldoAvg)", entry);
+                connection.Execute("INSERT INTO data(Origin, Time, Saldo, SaldoAvg) VALUES (@Origin, @Time, @Saldo, @SaldoAvg)", entry);
             }
             catch(Exception ex)
             {
@@ -199,7 +199,7 @@ namespace EGG_Haunolding_Management_System.Class
 
             try
             {
-                connection.Execute("INSERT INTO Data VALUES (@Origin, @Time, @Saldo, @SaldoAvg, @CompressionLevel)", entry);
+                connection.Execute("INSERT INTO data VALUES (@Origin, @Time, @Saldo, @SaldoAvg, @CompressionLevel)", entry);
             }
             catch (Exception ex)
             {
